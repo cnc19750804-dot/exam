@@ -7,583 +7,145 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Noto Sans TC', 'Helvetica Neue', sans-serif;
-    background: linear-gradient(145deg, #0f0f1a 0%, #1a1a2e 40%, #16213e 100%);
-    min-height: 100vh;
-    color: #e2e8f0;
-    -webkit-font-smoothing: antialiased;
-  }
-  #root { min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 24px 16px; }
-
-  .card {
-    background: rgba(255,255,255,0.04);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 24px;
-    padding: 28px 24px;
-    width: 100%;
-    animation: fadeIn 0.35s ease;
-  }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-  .student-bar {
-    display: flex; gap: 8px; align-items: center; font-size: 13px;
-    color: #a5b4fc; font-weight: 600; margin-bottom: 12px; padding: 8px 12px;
-    background: rgba(129,140,248,0.08); border-radius: 10px;
-  }
-  .student-bar .sep { color: #475569; }
-  .student-bar .sid { color: #94a3b8; }
-
-  .tag {
-    background: rgba(129,140,248,0.12); color: #a5b4fc;
-    padding: 5px 12px; border-radius: 20px; font-size: 13px; font-weight: 600;
-  }
-
-  label.field-label { display: block; font-size: 13px; font-weight: 700; color: #a5b4fc; margin-bottom: 6px; letter-spacing: 0.5px; }
-  input.field-input {
-    width: 100%; padding: 12px 14px; border-radius: 12px;
-    border: 2px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.25);
-    color: #e2e8f0; font-size: 15px; outline: none; transition: border-color 0.2s;
-    font-family: inherit;
-  }
-  input.field-input:focus { border-color: #818cf8; }
-  input.field-input.error { border-color: #f87171; }
-
-  .btn-primary {
-    background: linear-gradient(135deg, #818cf8, #6366f1); color: #fff;
-    border: none; border-radius: 14px; padding: 14px 40px; font-size: 17px;
-    font-weight: 700; cursor: pointer; letter-spacing: 1px; width: 100%;
-    font-family: inherit; transition: transform 0.1s, box-shadow 0.2s;
-  }
-  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.35); }
-  .btn-primary:active { transform: translateY(0); }
-
-  .progress-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-  .progress-label { font-size: 13px; color: #94a3b8; font-weight: 600; }
-  .score-inline { font-size: 13px; color: #fbbf24; font-weight: 700; }
-  .progress-bar { height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-bottom: 24px; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #818cf8, #6366f1); border-radius: 3px; transition: width 0.4s ease; }
-
-  .question-text { font-size: 18px; font-weight: 700; color: #e2e8f0; line-height: 1.7; margin: 0 0 16px; }
-
-  .hint-btn {
-    background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.25);
-    color: #fbbf24; border-radius: 12px; padding: 10px 16px; font-size: 14px;
-    cursor: pointer; margin-bottom: 20px; width: 100%; text-align: left;
-    line-height: 1.5; font-weight: 500; font-family: inherit;
-  }
-
-  .opts-col { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-  .opt-btn {
-    display: flex; align-items: center; gap: 12px;
-    background: rgba(255,255,255,0.04); border: 2px solid rgba(255,255,255,0.08);
-    border-radius: 14px; padding: 14px 16px; cursor: pointer; text-align: left;
-    transition: all 0.2s ease; font-size: 15px; color: #cbd5e1; line-height: 1.5;
-    font-family: inherit;
-  }
-  .opt-btn:not(:disabled):hover { border-color: rgba(129,140,248,0.4); background: rgba(129,140,248,0.06); }
-  .opt-btn:disabled { cursor: default; }
-  .opt-btn.correct { background: rgba(74,222,128,0.15); border-color: #4ade80; }
-  .opt-btn.wrong { background: rgba(248,113,113,0.15); border-color: #f87171; }
-  .opt-btn.dim { opacity: 0.4; }
-  .opt-label {
-    background: rgba(129,140,248,0.15); color: #a5b4fc;
-    width: 30px; height: 30px; border-radius: 8px; display: flex;
-    align-items: center; justify-content: center; font-weight: 800; font-size: 14px; flex-shrink: 0;
-  }
-
-  .feedback-banner {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px; border-radius: 14px; border: 1px solid; margin-bottom: 16px; flex-wrap: wrap;
-  }
-  .feedback-banner.ok { background: rgba(74,222,128,0.08); border-color: #4ade80; }
-  .feedback-banner.no { background: rgba(248,113,113,0.08); border-color: #f87171; }
-
-  .score-ring {
-    width: 120px; height: 120px; border-radius: 50%;
-    background: rgba(129,140,248,0.1); border: 4px solid #818cf8;
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; margin: 0 auto 24px;
-  }
-  .score-ring .num { font-size: 42px; font-weight: 900; color: #e2e8f0; }
-  .score-ring .den { font-size: 16px; color: #94a3b8; margin-top: -4px; }
-
-  .stat-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
-  .stat-box { background: rgba(255,255,255,0.04); border-radius: 14px; padding: 12px 20px; flex: 1; max-width: 120px; text-align: center; }
-  .stat-num { font-size: 26px; font-weight: 800; }
-  .stat-label { font-size: 12px; color: #94a3b8; }
-
-  .review-toggle {
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-    color: #a5b4fc; border-radius: 12px; padding: 12px 24px; font-size: 15px;
-    font-weight: 700; cursor: pointer; width: 100%; margin-bottom: 12px; font-family: inherit;
-  }
-  .review-toggle:hover { background: rgba(255,255,255,0.1); }
-
-  .review-list {
-    text-align: left; margin-bottom: 16px; max-height: 500px; overflow-y: auto;
-    display: flex; flex-direction: column; gap: 10px;
-  }
-  .review-item {
-    background: rgba(0,0,0,0.25); border-radius: 12px; padding: 14px 16px; border-left: 4px solid;
-  }
-  .review-item.ok { border-left-color: #4ade80; }
-  .review-item.no { border-left-color: #f87171; }
-  .review-header { display: flex; gap: 6px; align-items: center; margin-bottom: 6px; }
-  .review-qnum { font-size: 13px; font-weight: 800; color: #a5b4fc; }
-  .review-qtext { font-size: 14px; color: #e2e8f0; line-height: 1.6; margin: 0 0 8px; }
-  .review-your {
-    font-size: 13px; color: #cbd5e1; margin-bottom: 4px; padding: 6px 10px;
-    background: rgba(248,113,113,0.08); border-radius: 8px;
-  }
-  .review-correct {
-    font-size: 13px; color: #cbd5e1; margin-bottom: 4px; padding: 6px 10px;
-    background: rgba(74,222,128,0.08); border-radius: 8px;
-  }
-  .review-rat { font-size: 13px; color: #94a3b8; line-height: 1.6; margin-top: 6px; font-style: italic; }
-
-  .error-msg { color: #f87171; font-size: 13px; margin-bottom: 12px; text-align: left; }
-
-  .submit-status {
-    padding: 10px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 16px;
-    text-align: center; font-weight: 600;
-  }
-  .submit-status.ok { background: rgba(74,222,128,0.1); color: #4ade80; }
-  .submit-status.err { background: rgba(248,113,113,0.1); color: #f87171; }
-  .submit-status.loading { background: rgba(129,140,248,0.1); color: #a5b4fc; }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC','Helvetica Neue',sans-serif;background:linear-gradient(145deg,#0f0f1a 0%,#1a1a2e 40%,#16213e 100%);min-height:100vh;color:#e2e8f0;-webkit-font-smoothing:antialiased}
+#root{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px}
+.card{background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:28px 24px;width:100%;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sbar{display:flex;gap:8px;align-items:center;font-size:13px;color:#a5b4fc;font-weight:600;margin-bottom:12px;padding:8px 12px;background:rgba(129,140,248,0.08);border-radius:10px;flex-wrap:wrap}
+.sbar .sep{color:#475569}.sbar .dim{color:#94a3b8}.sbar .cls{color:#818cf8}
+.tag{background:rgba(129,140,248,0.12);color:#a5b4fc;padding:5px 12px;border-radius:20px;font-size:13px;font-weight:600}
+label.fl{display:block;font-size:13px;font-weight:700;color:#a5b4fc;margin-bottom:6px;letter-spacing:.5px}
+input.fi{width:100%;padding:12px 14px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.25);color:#e2e8f0;font-size:15px;outline:none;transition:border-color .2s;font-family:inherit}
+input.fi:focus{border-color:#818cf8}input.fi.err{border-color:#f87171}
+.bp{background:linear-gradient(135deg,#818cf8,#6366f1);color:#fff;border:none;border-radius:14px;padding:14px 40px;font-size:17px;font-weight:700;cursor:pointer;letter-spacing:1px;width:100%;font-family:inherit;transition:transform .1s,box-shadow .2s}
+.bp:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,102,241,.35)}.bp:active{transform:translateY(0)}.bp:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.pr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.pl{font-size:13px;color:#94a3b8;font-weight:600}.si{font-size:13px;color:#fbbf24;font-weight:700}
+.pb{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-bottom:24px}.pf{height:100%;background:linear-gradient(90deg,#818cf8,#6366f1);border-radius:3px;transition:width .4s ease}
+.qt{font-size:18px;font-weight:700;color:#e2e8f0;line-height:1.7;margin:0 0 16px}
+.hb{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);color:#fbbf24;border-radius:12px;padding:10px 16px;font-size:14px;cursor:pointer;margin-bottom:20px;width:100%;text-align:left;line-height:1.5;font-weight:500;font-family:inherit}
+.oc{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.ob{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .2s;font-size:15px;color:#cbd5e1;line-height:1.5;font-family:inherit}
+.ob:not(:disabled):hover{border-color:rgba(129,140,248,0.4);background:rgba(129,140,248,0.06)}.ob:disabled{cursor:default}
+.ob.ok{background:rgba(74,222,128,0.15);border-color:#4ade80}.ob.no{background:rgba(248,113,113,0.15);border-color:#f87171}.ob.dm{opacity:.4}
+.ol{background:rgba(129,140,248,0.15);color:#a5b4fc;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0}
+.fb{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid;margin-bottom:16px;flex-wrap:wrap}
+.fb.ok{background:rgba(74,222,128,0.08);border-color:#4ade80}.fb.no{background:rgba(248,113,113,0.08);border-color:#f87171}
+.sr{width:120px;height:120px;border-radius:50%;background:rgba(129,140,248,0.1);border:4px solid #818cf8;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
+.sr .n{font-size:42px;font-weight:900;color:#e2e8f0}.sr .d{font-size:16px;color:#94a3b8;margin-top:-4px}
+.stw{display:flex;gap:12px;justify-content:center;margin-bottom:24px}
+.stb{background:rgba(255,255,255,0.04);border-radius:14px;padding:12px 20px;flex:1;max-width:120px;text-align:center}
+.stn{font-size:26px;font-weight:800}.stl{font-size:12px;color:#94a3b8}
+.rt{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#a5b4fc;border-radius:12px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;width:100%;margin-bottom:12px;font-family:inherit}
+.rt:hover{background:rgba(255,255,255,0.1)}
+.rl{text-align:left;margin-bottom:16px;max-height:500px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
+.ri{background:rgba(0,0,0,0.25);border-radius:12px;padding:14px 16px;border-left:4px solid}.ri.ok{border-left-color:#4ade80}.ri.no{border-left-color:#f87171}
+.rh{display:flex;gap:6px;align-items:center;margin-bottom:6px}.rqn{font-size:13px;font-weight:800;color:#a5b4fc}
+.rqt{font-size:14px;color:#e2e8f0;line-height:1.6;margin:0 0 8px}
+.ry{font-size:13px;color:#cbd5e1;margin-bottom:4px;padding:6px 10px;background:rgba(248,113,113,0.08);border-radius:8px}
+.rc{font-size:13px;color:#cbd5e1;margin-bottom:4px;padding:6px 10px;background:rgba(74,222,128,0.08);border-radius:8px}
+.rr{font-size:13px;color:#94a3b8;line-height:1.6;margin-top:6px;font-style:italic}
+.em{color:#f87171;font-size:13px;margin-bottom:12px;text-align:left}
+.sm{padding:10px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;text-align:center;font-weight:600}
+.sm.ok{background:rgba(74,222,128,0.1);color:#4ade80}.sm.er{background:rgba(248,113,113,0.1);color:#f87171}.sm.ld{background:rgba(129,140,248,0.1);color:#a5b4fc}
+.ld{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.2);border-top-color:#a5b4fc;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
 </style>
 </head>
 <body>
 <div id="root"></div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
-
 <script type="text/babel">
-const { useState, useEffect } = React;
+const{useState,useEffect}=React;
 
-// ============================================================
-// ⚠️ 老師請把下面這行換成你自己的 Google Apps Script 網址！
-// 如果沒有設定，成績只會顯示在學生畫面上，不會回傳。
-// ============================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyxVzCpdx10nw16IMvk0ciNsMSlaXTYikilA2RnNp1wrelcJuPusgxrwG4_tMJZGYcW/exec";
+// ⚠️ 老師請換成你的 Google Apps Script 部署網址
+const API="https://script.google.com/macros/s/AKfycbxnFE-1AgjfQV6kPD-xLqqZO0i7bEKvumretjxlgPWhSbj7HKZ1UO_t95TW2k5VDP43jg/exec";
 
-const quizData = [
-  {
-    q: "買電腦時，店員激動地推銷：「這台的『大腦』超級聰明，跑很雷的隊友也不怕卡！」請問這個「大腦」是指哪一個零件？",
-    opts: [
-      { text: "硬碟 (HDD/SSD)", rat: "硬碟是負責長期裝東西的「倉庫」，它記性很好但不負責動腦思考喔。", ok: false },
-      { text: "中央處理器 (CPU)", rat: "沒錯！CPU 就是整台電腦的智商擔當，負責算數學跟指揮大家做事。", ok: true },
-      { text: "主記憶體 (RAM)", rat: "記憶體比較像是暫時放資料的「書桌」，桌子再大也不會幫你寫作業。", ok: false },
-      { text: "顯示卡 (GPU)", rat: "顯示卡是負責畫畫的「美術大師」，不是總指揮。", ok: false }
-    ],
-    hint: "它的知名品牌有 Intel (像 i5、i7) 還有 AMD 喔！"
-  },
-  {
-    q: "你急著上線打排位賽，結果電腦開機等了 3 分鐘，泡麵都快糊了！為了解救開機速度，你最該把系統裝在哪裡？",
-    opts: [
-      { text: "傳統硬碟 (HDD)", rat: "傳統硬碟是用磁盤慢慢轉，像在圖書館慢慢找書，速度超級慢！", ok: false },
-      { text: "固態硬碟 (SSD)", rat: "正解！SSD 裡面沒有會轉的零件，讀取資料就像開了任意門，開機只要 5 秒鐘！", ok: true },
-      { text: "雲端硬碟 (Google Drive)", rat: "雲端是用來備份檔案的，你的電腦還是得靠自己的硬碟來開機呀。", ok: false },
-      { text: "行動電源", rat: "行動電源只能給你電，不能給你速度啦！", ok: false }
-    ],
-    hint: "找那種裡面沒有機械構造、讀取速度快如閃電的酷東西。"
-  },
-  {
-    q: "你一邊聽 Spotify，一邊開著 30 個 Google 分頁找報告資料，電腦突然卡死不動，連滑鼠都變樹懶。這通常是因為哪裡的「空間被塞爆了」？",
-    opts: [
-      { text: "主記憶體 (RAM)", rat: "答對了！這就像你的「書桌」太小，攤開太多課本放不下，電腦就會大當機。", ok: true },
-      { text: "硬碟 (Storage)", rat: "硬碟是用來長久存檔的，純粹開太多分頁通常是先耗盡「暫存空間(書桌)」。", ok: false },
-      { text: "螢幕尺寸", rat: "螢幕小只會讓你眼睛酸，不會讓電腦卡死喔。", ok: false },
-      { text: "電源供應器", rat: "電源只是供電，跟能同時開幾個分頁無關。", ok: false }
-    ],
-    hint: "想像你的「書桌」面積有限，放太多東西就會滿出來，必須重開機(收書包)清空。"
-  },
-  {
-    q: "如果電腦是一個大企業，誰是那個負責管整間公司、指派硬體工作，還會給你一個漂亮視窗介面點擊的「總經理」？",
-    opts: [
-      { text: "防毒軟體 (Anti-Virus)", rat: "防毒軟體比較像是大樓警衛，負責抓壞人，不管公司營運。", ok: false },
-      { text: "作業系統 (OS)", rat: "沒錯！像 Windows、macOS 都是作業系統，沒有它，軟硬體就會互相聽不懂對方講話。", ok: true },
-      { text: "瀏覽器 (Chrome)", rat: "瀏覽器只是讓你上網的工具，它是總經理底下的一名小員工而已。", ok: false },
-      { text: "文書軟體 (Word)", rat: "Word 負責幫你打報告，不負責管硬體。", ok: false }
-    ],
-    hint: "你每天開機第一眼看到在轉圈圈的 Windows 就是它。"
-  },
-  {
-    q: "網購推銷：「這台有 1TB 超大空間！」請問 1TB 的肚子大概可以裝下多少 GB 的照片和遊戲？",
-    opts: [
-      { text: "100 GB", rat: "太小看 TB 了！1TB 遠遠不只 100 GB 喔。", ok: false },
-      { text: "1000 GB", rat: "正解！記住魔法公式：1 TB = 1000 GB！可以裝大概 30 萬張手機照片！", ok: true },
-      { text: "10000 GB", rat: "那叫做 10TB，通常是超級電腦或大型資料庫才有的怪物級容量。", ok: false },
-      { text: "10 GB", rat: "這連現在一個稍微大一點的手遊都裝不下啦！", ok: false }
-    ],
-    hint: "T (Tera) 是 G (Giga) 的下一個大單位，換算通常是加三個零。"
-  },
-  {
-    q: "為了玩《黑神話：悟空》或《特戰英豪》，你不想畫面卡成 PPT (投影片)，買筆電時你絕對要確認它有帶上哪位「神級繪圖大師」？",
-    opts: [
-      { text: "高級視訊鏡頭", rat: "視訊鏡頭只負責拍你的臉，不負責處理遊戲裡的 3D 動畫。", ok: false },
-      { text: "獨立顯示卡 (獨顯)", rat: "對！獨顯就是專門外包處理超炫 3D 特效的大師，沒有他，遊戲絕對卡爆！", ok: true },
-      { text: "超高音質喇叭", rat: "聲音再好聽，畫面卡成狗也是玩不下去的。", ok: false },
-      { text: "觸控螢幕", rat: "打 3D 大作通常用鍵盤滑鼠或搖桿，觸控螢幕幫不上忙。", ok: false }
-    ],
-    hint: "像是 NVIDIA 的 RTX 3070 這種名字看起來很帥的零件就是了。"
-  },
-  {
-    q: "在網路上傳 LINE 給曖昧對象，訊息之所以能準確送到對方手機裡不迷路，是因為每台設備都有一個專屬的「數位門牌號碼」，這叫做？",
-    opts: [
-      { text: "身分證字號", rat: "這是政府發給你的，網路世界不認這個喔。", ok: false },
-      { text: "IP 位址", rat: "正確！IP 就是網路上的門牌，讓封包知道「這則訊息要送到哪個地址」。", ok: true },
-      { text: "GPS 定位", rat: "GPS 是用來導航找實體位置的，不是網路傳資料用的門牌。", ok: false },
-      { text: "HTTPS", rat: "這是一種加密傳輸的規則，不是設備的門牌號碼。", ok: false }
-    ],
-    hint: "一串看起來像「192.168.1.1」的數字密碼。"
-  },
-  {
-    q: "朋友臭屁地說：「哎呀，我的照片都存在雲端啦，不怕不見！」請問這個「雲端」到底在哪裡？",
-    opts: [
-      { text: "在天上的雲層裡，所以下雨天網路會變慢。", rat: "太有想像力了！但數位資料是無法存放在水氣裡的。", ok: false },
-      { text: "在遠端科技公司 (如 Google) 的超大冷氣機房裡。", rat: "沒錯！雲端其實就是「別人的超強電腦」，把資料透過網路存在他們安全的機房裡。", ok: true },
-      { text: "藏在手機的螢幕玻璃夾層中。", rat: "這根本是科幻片情節了吧！", ok: false },
-      { text: "漂浮在我們周圍的 Wi-Fi 訊號中。", rat: "Wi-Fi 只是傳輸通道，不能拿來「存放」東西。", ok: false }
-    ],
-    hint: "它其實是非常巨大、有冷氣吹、還有一堆守衛看守的實體大樓機房。"
-  },
-  {
-    q: "信箱收到一封信：「親愛的用戶，您的 Netflix 帳戶異常，請點擊連結輸入信用卡號解鎖！」這通常是哪種網路陷阱？",
-    opts: [
-      { text: "DDoS 攻擊", rat: "這通常是用大量流量癱瘓網站的攻擊，不會騙你的信用卡。", ok: false },
-      { text: "釣魚攻擊 (Phishing)", rat: "超危險！駭客偽裝成官方，丟出誘餌騙你上鉤輸入密碼或卡號，千萬別點！", ok: true },
-      { text: "勒索軟體 (Ransomware)", rat: "勒索軟體是把你的檔案鎖碼，然後逼你付比特幣當贖金。", ok: false },
-      { text: "實體駭客入侵", rat: "駭客不用親自跑去你家，用 Email 就能騙到你了。", ok: false }
-    ],
-    hint: "駭客撒下誘餌，就等你不小心「上鉤」。"
-  },
-  {
-    q: "為了不被駭客盜帳號、看光你的私密對話，哪一種密碼設定方式最像「鋼鐵保險箱」？",
-    opts: [
-      { text: "用自己的生日 (如 920520)，好記又方便。", rat: "駭客去你的 IG 看一下就知道你哪天生日了，超級危險！", ok: false },
-      { text: "所有網站都用同一組密碼「iloveyou123」。", rat: "只要有一個網站被破解，你所有的帳號都會像骨牌一樣全倒！", ok: false },
-      { text: "大小寫英數加符號大亂鬥，而且每個網站的密碼都不一樣。", rat: "正解！這能大幅增加暴力破解的難度，是最安全的做法！", ok: true },
-      { text: "把密碼寫在便利貼，貼在筆電螢幕旁邊。", rat: "這叫「物理外洩」，同學走過去全都看到了啦！", ok: false }
-    ],
-    hint: "密碼就像家裡的鑰匙，越複雜越難打，而且大門跟保險箱絕對不能用同一把鑰匙。"
-  },
-  {
-    q: "期末報告死線 (Deadline) 快到了！你在網路上看到一篇超棒的文章，想拿來用，怎樣做才不會被 Naichen 老師死當？",
-    opts: [
-      { text: "整段複製貼上，裝作是自己昨晚熬夜寫的心得。", rat: "這叫嚴重抄襲！違反學術倫理，老師用軟體一查就抓到了。", ok: false },
-      { text: "偷改掉幾個字 (例如把「因此」改成「所以」)，就不算抄襲了。", rat: "這叫「改寫抄襲」，只要沒標來源，一樣違反學術規定喔！", ok: false },
-      { text: "用自己的話總結重點，並在報告最後乖乖放上參考資料的網址。", rat: "完美！尊重原作者的心血，並清楚交代來源，這才是 Naichen 老師要的正確學術態度！", ok: true },
-      { text: "把文章截圖放進報告裡，當作沒這回事。", rat: "用圖片也是引用別人產出的內容，不標來源一樣母湯！", ok: false }
-    ],
-    hint: "回想一下老師在報告格式規定裡「若有引述非自身產出之文字」的嚴厲提醒。"
-  },
-  {
-    q: "最近大家都在玩 ChatGPT，請它幫忙寫信、掰故事甚至寫程式。這位超級 AI 助理是靠哪種魔法練成的？",
-    opts: [
-      { text: "區塊鏈 (Blockchain)", rat: "區塊鏈主要是用來記帳和發行虛擬貨幣的，不會跟你聊天。", ok: false },
-      { text: "擴增實境 (AR)", rat: "這是像寶可夢 GO 那樣，把虛擬影像放到現實世界裡的技術。", ok: false },
-      { text: "生成式人工智慧 (Generative AI)", rat: "答對了！它看過人類寫的好幾億篇文章，學會了如何「生成」像人類講話的內容。", ok: true },
-      { text: "量子運算 (Quantum Computing)", rat: "雖然量子運算很強，但現在的 ChatGPT 還不需要動用到量子電腦來跟你聊天。", ok: false }
-    ],
-    hint: "這項技術讓電腦變得像人一樣，能夠自己「產出、創造」新的內容。"
-  },
-  {
-    q: "人還沒到家，先用手機把房間冷氣打開；智慧手錶還會天天監控你的心跳。這種「萬物都能連上網」的魔法叫什麼？",
-    opts: [
-      { text: "虛擬實境 (VR)", rat: "VR 是讓你戴上頭盔進入虛擬遊戲世界，跟開冷氣無關。", ok: false },
-      { text: "物聯網 (IoT)", rat: "沒錯！Internet of Things，讓身邊的物品都裝上感測器並連上網路變聰明！", ok: true },
-      { text: "元宇宙 (Metaverse)", rat: "元宇宙是一個虛擬社交空間，不是用來控制實體家電的。", ok: false },
-      { text: "比特幣 (Bitcoin)", rat: "這是虛擬錢幣，不能幫你量心跳啦！", ok: false }
-    ],
-    hint: "中文字面上的意思就是「物」品都「聯」上「網」路了。"
-  },
-  {
-    q: "為了讓未來的「自動駕駛車」在路上遇到突發狀況能瞬間煞車，而不因為網路卡頓撞上樹，我們急需哪一種「超低延遲」的通訊技術？",
-    opts: [
-      { text: "3G 網路", rat: "用 3G 的速度，等車子收到煞車指令時，可能已經撞上去了...", ok: false },
-      { text: "藍牙 (Bluetooth)", rat: "藍牙距離太短了，只能連連耳機，沒辦法指揮馬路上的車。", ok: false },
-      { text: "5G 通訊技術", rat: "正確！5G 最大的特色就是「超低延遲」，反應時間不到一毫秒，是自駕車的保命符！", ok: true },
-      { text: "紅外線 (IR)", rat: "紅外線中間不能有東西擋住(像電視遙控器)，在馬路上根本行不通。", ok: false }
-    ],
-    hint: "這是目前最新一代的行動網路標準，比我們以前用的 4G 快上幾十倍。"
-  },
-  {
-    q: "哪一種未來科技被形容會「影分身之術」，可以同時走完迷宮的所有路線，快到連現在的超強銀行密碼都能瞬間破解？",
-    opts: [
-      { text: "傳統超級電腦", rat: "傳統電腦再強，也是一次走一條路碰壁再回頭，不會影分身。", ok: false },
-      { text: "邊緣運算", rat: "這只是把運算工作移到離你比較近的地方，不代表它會影分身。", ok: false },
-      { text: "量子電腦 (Quantum Computer)", rat: "沒錯！利用神奇的量子疊加態，它可以同時處於很多種狀態，運算力大爆發！", ok: true },
-      { text: "光纖網路", rat: "光纖是負責傳輸資料的線路，本身不具備運算破解密碼的能力。", ok: false }
-    ],
-    hint: "這項技術的名稱聽起來非常有「漫威電影」物理學、科幻的感覺。"
-  },
-  {
-    q: "報告打到一半電腦突然卡死，你狂按滑鼠都沒反應。在哭著找工程師學長求救之前，你最應該先嘗試的「IT 神聖儀式」是什麼？",
-    opts: [
-      { text: "把硬碟拆下來吹一吹再裝回去。", rat: "千萬不要！這會讓你的電腦直接報銷，保固也沒了！", ok: false },
-      { text: "將電腦重新開機 (Restart)。", rat: "正解！這能清空記憶體裡的錯誤狀態，能解決世界上 90% 的電腦小毛病！", ok: true },
-      { text: "用力拍打電腦主機側邊三下。", rat: "這只對古老的真空管電視有效，拍現代電腦只會把硬碟震壞！", ok: false },
-      { text: "立刻拔掉網路線。", rat: "除非你正在被駭客攻擊，否則斷網無法解決畫面卡死的問題。", ok: false }
-    ],
-    hint: "有句經典的 IT 萬用名言：「遇到問題，先＿＿試試看。」"
-  },
-  {
-    q: "在家族 LINE 群組看到阿姨傳：「震驚！每天吃這顆水果，連癌症都能治好！」在順手按轉傳之前，你應該先做什麼？",
-    opts: [
-      { text: "先轉傳給另外十個朋友，寧可信其有。", rat: "這就是假新聞氾濫的元兇！千萬別當不實訊息的幫兇。", ok: false },
-      { text: "去看底下有沒有其他長輩說「感恩分享」。", rat: "長輩的回覆不能當作科學證據啦！", ok: false },
-      { text: "去事實查核中心網站 (如 MyGoPen、TFC) 查看看這是不是在唬爛。", rat: "非常優秀！培養批判性思考，驗證資訊真偽，是現代數位公民必備的素養！", ok: true },
-      { text: "把標題改得更聳動一點再發到自己的 IG 限動。", rat: "這樣做你也會變成散佈謠言的共犯喔！", ok: false }
-    ],
-    hint: "不要輕易相信來源不明的文字，需要尋找「客觀的驗證單位」。"
-  },
-  {
-    q: "網購筆電看到規格寫著「On board 記憶體 8GB」，這代表你買回去之後會面臨什麼殘酷的現實？",
-    opts: [
-      { text: "代表它附贈了一塊免費的衝浪板 (Board)。", rat: "英文不是這樣翻的啦！", ok: false },
-      { text: "代表記憶體被強力膠銲死在主機板上，以後覺得慢也完全無法擴充升級！", rat: "答對了！這可是很多大學生買文書機被坑的地雷，買之前一定要確認容量夠不夠！", ok: true },
-      { text: "代表這台筆電可以帶上飛機 (On board)。", rat: "所有筆電都能帶上飛機，這不是什麼特殊規格。", ok: false },
-      { text: "代表它的開機速度比別人快一倍。", rat: "銲接在主機板上不代表速度會變快，只是節省筆電內部的空間而已。", ok: false }
-    ],
-    hint: "想像你的小書桌被強力膠死死黏在地板上，以後就算課本變多，也換不了大桌子。"
-  },
-  {
-    q: "現在買新手機或輕薄筆電，通常只有一種「扁扁的、正反面閉著眼睛都能插進去」的接孔，它叫什麼名字？",
-    opts: [
-      { text: "USB Type-A", rat: "這是傳統長方形的 USB，有正反面之分，每次都要插三次才會對！", ok: false },
-      { text: "VGA 介面", rat: "這是古老的藍色大頭影像線，完全不能用來充電。", ok: false },
-      { text: "USB Type-C", rat: "正確！它是目前最紅的介面，連最新的 iPhone 15 都全面改用它了！", ok: true },
-      { text: "耳機孔 (3.5mm)", rat: "耳機孔是圓形的，而且現在很多手機都把它取消掉囉。", ok: false }
-    ],
-    hint: "連最新的蘋果手機都被歐盟規定必須改成這種接孔囉。"
-  },
-  {
-    q: "在星巴克喝咖啡，連上沒密碼的「免費公共 Wi-Fi」時，做哪件事情最容易讓駭客在一旁笑著把你的錢搬光？",
-    opts: [
-      { text: "看 YouTube 最新出的 MV。", rat: "看影片不涉及輸入密碼，風險相對較低。", ok: false },
-      { text: "用 Google 查今天晚上的天氣。", rat: "查天氣是公開資訊，不會造成個人財產損失。", ok: false },
-      { text: "登入網路銀行轉帳，順便輸入提款密碼。", rat: "千萬母湯！公共 Wi-Fi 很容易被駭客「側錄」，你的帳號密碼會被看光光！", ok: true },
-      { text: "看學校網站的行事曆。", rat: "只要不需要輸入私人帳密，單純瀏覽網頁是相對安全的。", ok: false }
-    ],
-    hint: "想想看哪一件事情如果被駭客偷看或攔截到了，會讓你當場破產。"
-  }
+const Q=[
+{q:"買電腦時，店員激動地推銷：「這台的『大腦』超級聰明，跑很雷的隊友也不怕卡！」請問這個「大腦」是指哪一個零件？",o:[{t:"硬碟 (HDD/SSD)",r:"硬碟是負責長期裝東西的「倉庫」，它記性很好但不負責動腦思考喔。",k:0},{t:"中央處理器 (CPU)",r:"沒錯！CPU 就是整台電腦的智商擔當，負責算數學跟指揮大家做事。",k:1},{t:"主記憶體 (RAM)",r:"記憶體比較像是暫時放資料的「書桌」，桌子再大也不會幫你寫作業。",k:0},{t:"顯示卡 (GPU)",r:"顯示卡是負責畫畫的「美術大師」，不是總指揮。",k:0}],h:"它的知名品牌有 Intel (像 i5、i7) 還有 AMD 喔！"},
+{q:"你急著上線打排位賽，結果電腦開機等了 3 分鐘，泡麵都快糊了！為了解救開機速度，你最該把系統裝在哪裡？",o:[{t:"傳統硬碟 (HDD)",r:"傳統硬碟是用磁盤慢慢轉，像在圖書館慢慢找書，速度超級慢！",k:0},{t:"固態硬碟 (SSD)",r:"正解！SSD 裡面沒有會轉的零件，讀取資料就像開了任意門，開機只要 5 秒鐘！",k:1},{t:"雲端硬碟 (Google Drive)",r:"雲端是用來備份檔案的，你的電腦還是得靠自己的硬碟來開機呀。",k:0},{t:"行動電源",r:"行動電源只能給你電，不能給你速度啦！",k:0}],h:"找那種裡面沒有機械構造、讀取速度快如閃電的酷東西。"},
+{q:"你一邊聽 Spotify，一邊開著 30 個 Google 分頁找報告資料，電腦突然卡死不動，連滑鼠都變樹懶。這通常是因為哪裡的「空間被塞爆了」？",o:[{t:"主記憶體 (RAM)",r:"答對了！這就像你的「書桌」太小，攤開太多課本放不下，電腦就會大當機。",k:1},{t:"硬碟 (Storage)",r:"硬碟是用來長久存檔的，純粹開太多分頁通常是先耗盡「暫存空間(書桌)」。",k:0},{t:"螢幕尺寸",r:"螢幕小只會讓你眼睛酸，不會讓電腦卡死喔。",k:0},{t:"電源供應器",r:"電源只是供電，跟能同時開幾個分頁無關。",k:0}],h:"想像你的「書桌」面積有限，放太多東西就會滿出來，必須重開機(收書包)清空。"},
+{q:"如果電腦是一個大企業，誰是那個負責管整間公司、指派硬體工作，還會給你一個漂亮視窗介面點擊的「總經理」？",o:[{t:"防毒軟體 (Anti-Virus)",r:"防毒軟體比較像是大樓警衛，負責抓壞人，不管公司營運。",k:0},{t:"作業系統 (OS)",r:"沒錯！像 Windows、macOS 都是作業系統，沒有它，軟硬體就會互相聽不懂對方講話。",k:1},{t:"瀏覽器 (Chrome)",r:"瀏覽器只是讓你上網的工具，它是總經理底下的一名小員工而已。",k:0},{t:"文書軟體 (Word)",r:"Word 負責幫你打報告，不負責管硬體。",k:0}],h:"你每天開機第一眼看到在轉圈圈的 Windows 就是它。"},
+{q:"網購推銷：「這台有 1TB 超大空間！」請問 1TB 的肚子大概可以裝下多少 GB？",o:[{t:"100 GB",r:"太小看 TB 了！1TB 遠遠不只 100 GB 喔。",k:0},{t:"1000 GB",r:"正解！記住魔法公式：1 TB = 1000 GB！",k:1},{t:"10000 GB",r:"那叫做 10TB，通常是超級電腦才有的怪物級容量。",k:0},{t:"10 GB",r:"這連一個手遊都裝不下啦！",k:0}],h:"T (Tera) 是 G (Giga) 的下一個大單位，換算通常是加三個零。"},
+{q:"為了玩《黑神話：悟空》或《特戰英豪》，你不想畫面卡成 PPT，買筆電時你絕對要確認它有帶上哪位「神級繪圖大師」？",o:[{t:"高級視訊鏡頭",r:"視訊鏡頭只負責拍你的臉，不負責處理遊戲裡的 3D 動畫。",k:0},{t:"獨立顯示卡 (獨顯)",r:"對！獨顯就是專門外包處理超炫 3D 特效的大師，沒有他，遊戲絕對卡爆！",k:1},{t:"超高音質喇叭",r:"聲音再好聽，畫面卡成狗也是玩不下去的。",k:0},{t:"觸控螢幕",r:"打 3D 大作通常用鍵盤滑鼠或搖桿，觸控螢幕幫不上忙。",k:0}],h:"像是 NVIDIA 的 RTX 3070 這種名字看起來很帥的零件就是了。"},
+{q:"在網路上傳 LINE 給曖昧對象，訊息之所以能準確送到對方手機裡不迷路，是因為每台設備都有一個專屬的「數位門牌號碼」，這叫做？",o:[{t:"身分證字號",r:"這是政府發給你的，網路世界不認這個喔。",k:0},{t:"IP 位址",r:"正確！IP 就是網路上的門牌，讓封包知道「這則訊息要送到哪個地址」。",k:1},{t:"GPS 定位",r:"GPS 是用來導航找實體位置的，不是網路傳資料用的門牌。",k:0},{t:"HTTPS",r:"這是一種加密傳輸的規則，不是設備的門牌號碼。",k:0}],h:"一串看起來像「192.168.1.1」的數字密碼。"},
+{q:"朋友臭屁地說：「哎呀，我的照片都存在雲端啦，不怕不見！」請問這個「雲端」到底在哪裡？",o:[{t:"在天上的雲層裡，所以下雨天網路會變慢。",r:"太有想像力了！但數位資料是無法存放在水氣裡的。",k:0},{t:"在遠端科技公司 (如 Google) 的超大冷氣機房裡。",r:"沒錯！雲端其實就是「別人的超強電腦」，把資料透過網路存在他們安全的機房裡。",k:1},{t:"藏在手機的螢幕玻璃夾層中。",r:"這根本是科幻片情節了吧！",k:0},{t:"漂浮在我們周圍的 Wi-Fi 訊號中。",r:"Wi-Fi 只是傳輸通道，不能拿來「存放」東西。",k:0}],h:"它其實是非常巨大、有冷氣吹、還有一堆守衛看守的實體大樓機房。"},
+{q:"信箱收到一封信：「親愛的用戶，您的 Netflix 帳戶異常，請點擊連結輸入信用卡號解鎖！」這通常是哪種網路陷阱？",o:[{t:"DDoS 攻擊",r:"這通常是用大量流量癱瘓網站的攻擊，不會騙你的信用卡。",k:0},{t:"釣魚攻擊 (Phishing)",r:"超危險！駭客偽裝成官方，丟出誘餌騙你上鉤輸入密碼或卡號，千萬別點！",k:1},{t:"勒索軟體 (Ransomware)",r:"勒索軟體是把你的檔案鎖碼，然後逼你付比特幣當贖金。",k:0},{t:"實體駭客入侵",r:"駭客不用親自跑去你家，用 Email 就能騙到你了。",k:0}],h:"駭客撒下誘餌，就等你不小心「上鉤」。"},
+{q:"為了不被駭客盜帳號，哪一種密碼設定方式最像「鋼鐵保險箱」？",o:[{t:"用自己的生日 (如 920520)",r:"駭客去你的 IG 看一下就知道你哪天生日了，超級危險！",k:0},{t:"所有網站都用同一組密碼「iloveyou123」",r:"只要有一個網站被破解，你所有的帳號都會像骨牌一樣全倒！",k:0},{t:"大小寫英數加符號大亂鬥，而且每個網站密碼都不一樣",r:"正解！這能大幅增加暴力破解的難度，是最安全的做法！",k:1},{t:"把密碼寫在便利貼，貼在筆電螢幕旁邊",r:"這叫「物理外洩」，同學走過去全都看到了啦！",k:0}],h:"密碼就像家裡的鑰匙，越複雜越難打，而且大門跟保險箱絕對不能用同一把鑰匙。"},
+{q:"期末報告死線快到了！你在網路上看到一篇超棒的文章想拿來用，怎樣做才不會被 Naichen 老師死當？",o:[{t:"整段複製貼上，裝作是自己寫的",r:"這叫嚴重抄襲！違反學術倫理，老師用軟體一查就抓到了。",k:0},{t:"偷改掉幾個字，就不算抄襲了",r:"這叫「改寫抄襲」，只要沒標來源，一樣違反學術規定喔！",k:0},{t:"用自己的話總結重點，並放上參考資料網址",r:"完美！尊重原作者的心血，並清楚交代來源，這才是正確學術態度！",k:1},{t:"把文章截圖放進報告裡",r:"用圖片也是引用別人產出的內容，不標來源一樣母湯！",k:0}],h:"回想一下老師在報告格式規定裡「若有引述非自身產出之文字」的嚴厲提醒。"},
+{q:"最近大家都在玩 ChatGPT，這位超級 AI 助理是靠哪種魔法練成的？",o:[{t:"區塊鏈 (Blockchain)",r:"區塊鏈主要是用來記帳和發行虛擬貨幣的，不會跟你聊天。",k:0},{t:"擴增實境 (AR)",r:"這是像寶可夢 GO 那樣，把虛擬影像放到現實世界裡的技術。",k:0},{t:"生成式人工智慧 (Generative AI)",r:"答對了！它看過好幾億篇文章，學會了如何「生成」像人類講話的內容。",k:1},{t:"量子運算 (Quantum Computing)",r:"雖然量子運算很強，但現在的 ChatGPT 還不需要動用到量子電腦。",k:0}],h:"這項技術讓電腦變得像人一樣，能夠自己「產出、創造」新的內容。"},
+{q:"人還沒到家，先用手機把房間冷氣打開；智慧手錶還會天天監控你的心跳。這種「萬物都能連上網」的魔法叫什麼？",o:[{t:"虛擬實境 (VR)",r:"VR 是讓你戴上頭盔進入虛擬遊戲世界，跟開冷氣無關。",k:0},{t:"物聯網 (IoT)",r:"沒錯！Internet of Things，讓身邊的物品都裝上感測器並連上網路變聰明！",k:1},{t:"元宇宙 (Metaverse)",r:"元宇宙是一個虛擬社交空間，不是用來控制實體家電的。",k:0},{t:"比特幣 (Bitcoin)",r:"這是虛擬錢幣，不能幫你量心跳啦！",k:0}],h:"中文字面上的意思就是「物」品都「聯」上「網」路了。"},
+{q:"為了讓未來的「自動駕駛車」能瞬間煞車，我們急需哪一種「超低延遲」的通訊技術？",o:[{t:"3G 網路",r:"用 3G 的速度，等車子收到煞車指令時可能已經撞上去了...",k:0},{t:"藍牙 (Bluetooth)",r:"藍牙距離太短了，只能連連耳機，沒辦法指揮馬路上的車。",k:0},{t:"5G 通訊技術",r:"正確！5G 最大的特色就是「超低延遲」，是自駕車的保命符！",k:1},{t:"紅外線 (IR)",r:"紅外線中間不能有東西擋住，在馬路上根本行不通。",k:0}],h:"這是目前最新一代的行動網路標準，比 4G 快上幾十倍。"},
+{q:"哪一種未來科技被形容會「影分身之術」，可以同時走完迷宮的所有路線？",o:[{t:"傳統超級電腦",r:"傳統電腦再強，也是一次走一條路碰壁再回頭，不會影分身。",k:0},{t:"邊緣運算",r:"這只是把運算工作移到離你比較近的地方，不代表它會影分身。",k:0},{t:"量子電腦 (Quantum Computer)",r:"沒錯！利用神奇的量子疊加態，運算力大爆發！",k:1},{t:"光纖網路",r:"光纖是負責傳輸資料的線路，本身不具備運算能力。",k:0}],h:"這項技術的名稱聽起來非常有「漫威電影」物理學、科幻的感覺。"},
+{q:"報告打到一半電腦突然卡死，你最應該先嘗試的「IT 神聖儀式」是什麼？",o:[{t:"把硬碟拆下來吹一吹再裝回去",r:"千萬不要！這會讓你的電腦直接報銷！",k:0},{t:"將電腦重新開機 (Restart)",r:"正解！這能清空記憶體裡的錯誤狀態，能解決 90% 的電腦小毛病！",k:1},{t:"用力拍打電腦主機側邊三下",r:"這只對古老的真空管電視有效，拍現代電腦只會把硬碟震壞！",k:0},{t:"立刻拔掉網路線",r:"除非你正在被駭客攻擊，否則斷網無法解決畫面卡死的問題。",k:0}],h:"有句經典的 IT 萬用名言：「遇到問題，先＿＿試試看。」"},
+{q:"在家族 LINE 群組看到阿姨傳：「震驚！每天吃這顆水果，連癌症都能治好！」你應該先做什麼？",o:[{t:"先轉傳給十個朋友，寧可信其有",r:"這就是假新聞氾濫的元兇！千萬別當不實訊息的幫兇。",k:0},{t:"去看底下有沒有長輩說「感恩分享」",r:"長輩的回覆不能當作科學證據啦！",k:0},{t:"去事實查核中心 (如 MyGoPen、TFC) 查看看",r:"非常優秀！培養批判性思考，是現代數位公民必備的素養！",k:1},{t:"把標題改得更聳動再發到 IG 限動",r:"這樣做你也會變成散佈謠言的共犯喔！",k:0}],h:"不要輕易相信來源不明的文字，需要尋找「客觀的驗證單位」。"},
+{q:"網購筆電看到「On board 記憶體 8GB」，這代表什麼？",o:[{t:"附贈一塊免費的衝浪板 (Board)",r:"英文不是這樣翻的啦！",k:0},{t:"記憶體被銲死在主機板上，無法擴充升級！",r:"答對了！這可是很多大學生買文書機被坑的地雷！",k:1},{t:"這台筆電可以帶上飛機 (On board)",r:"所有筆電都能帶上飛機，這不是什麼特殊規格。",k:0},{t:"開機速度比別人快一倍",r:"銲接在主機板上不代表速度會變快。",k:0}],h:"想像你的小書桌被強力膠死死黏在地板上，以後也換不了大桌子。"},
+{q:"現在買新手機，通常只有一種「正反面都能插」的接孔，它叫什麼？",o:[{t:"USB Type-A",r:"這是傳統長方形的 USB，有正反面之分，每次都要插三次才會對！",k:0},{t:"VGA 介面",r:"這是古老的藍色大頭影像線，完全不能用來充電。",k:0},{t:"USB Type-C",r:"正確！連最新的 iPhone 都全面改用它了！",k:1},{t:"耳機孔 (3.5mm)",r:"耳機孔是圓形的，而且現在很多手機都取消了。",k:0}],h:"連最新的蘋果手機都被歐盟規定必須改成這種接孔囉。"},
+{q:"在星巴克連上免費公共 Wi-Fi 時，做哪件事最容易讓駭客把你的錢搬光？",o:[{t:"看 YouTube MV",r:"看影片不涉及輸入密碼，風險相對較低。",k:0},{t:"用 Google 查天氣",r:"查天氣是公開資訊，不會造成財產損失。",k:0},{t:"登入網路銀行轉帳",r:"千萬母湯！公共 Wi-Fi 很容易被駭客「側錄」，帳號密碼會被看光光！",k:1},{t:"看學校網站的行事曆",r:"只要不需要輸入私人帳密，單純瀏覽網頁是相對安全的。",k:0}],h:"想想看哪件事如果被駭客偷看到了，會讓你當場破產。"}
 ];
 
-function shuffleArray(arr) {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+function grd(s,t){const p=s/t;if(p>=.9)return{e:"🏆",t:"電腦天才！",s:"你根本是 IT 部門本人吧？",c:"#FFD700"};if(p>=.7)return{e:"🌟",t:"數位達人！",s:"你的資訊素養超越 87% 的人！",c:"#7CF5FF"};if(p>=.5)return{e:"📱",t:"科技小白進化中",s:"再加把勁就能成為科技達人！",c:"#A78BFA"};return{e:"🐣",t:"數位新生兒",s:"沒關係！看完解答你已經升級了！",c:"#FB923C"}}
+async function apiG(p){const r=await fetch(API+"?"+new URLSearchParams(p));return r.json()}
+async function apiP(d){await fetch(API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})}
+
+function Login({onOk}){
+  const[sid,setS]=useState("");const[pw,setP]=useState("");const[err,setE]=useState("");const[ld,setL]=useState(false);
+  const go=async()=>{if(!sid.trim()||!pw.trim()){setE("請輸入學號和密碼");return}setL(true);setE("");try{const r=await apiG({action:"login",sid:sid.trim(),pw:pw.trim()});if(r.status==="ok")onOk({sid:sid.trim(),name:r.name,cls:r.className,chg:r.needChangePassword});else setE(r.message||"登入失敗")}catch(e){setE("網路連線失敗")}setL(false)};
+  return(<div className="card" style={{maxWidth:420,marginTop:50,textAlign:"center"}}><div style={{fontSize:56,marginBottom:12}}>🔐</div><h1 style={{fontSize:28,fontWeight:900,marginBottom:8}}>資訊素養大挑戰</h1><p style={{fontSize:14,color:"#94a3b8",marginBottom:24}}>請用學號登入開始測驗</p><div style={{textAlign:"left",marginBottom:16}}><label className="fl">學號</label><input className={"fi"+(err&&!sid.trim()?" err":"")} placeholder="請輸入學號" value={sid} onChange={e=>setS(e.target.value)} onKeyDown={e=>e.key==="Enter"&&document.getElementById("pw")?.focus()}/></div><div style={{textAlign:"left",marginBottom:20}}><label className="fl">密碼</label><input id="pw" type="password" className={"fi"+(err&&!pw.trim()?" err":"")} placeholder="首次登入密碼為學號" value={pw} onChange={e=>setP(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()}/></div>{err&&<p className="em">⚠️ {err}</p>}<button className="bp" onClick={go} disabled={ld}>{ld?<><span className="ld"/>登入中...</>:"登入 →"}</button><p style={{fontSize:11,color:"#475569",marginTop:16}}>首次登入密碼為學號，登入後需修改密碼</p></div>);
 }
 
-function getGrade(score, total) {
-  const pct = score / total;
-  if (pct >= 0.9) return { emoji: "🏆", title: "電腦天才！", sub: "你根本是 IT 部門本人吧？", color: "#FFD700" };
-  if (pct >= 0.7) return { emoji: "🌟", title: "數位達人！", sub: "你的資訊素養超越 87% 的人！", color: "#7CF5FF" };
-  if (pct >= 0.5) return { emoji: "📱", title: "科技小白進化中", sub: "再加把勁就能成為科技達人！", color: "#A78BFA" };
-  return { emoji: "🐣", title: "數位新生兒", sub: "沒關係！看完解答你已經升級了！", color: "#FB923C" };
+function ChgPw({stu,onOk}){
+  const[np,setN]=useState("");const[np2,setN2]=useState("");const[err,setE]=useState("");const[ld,setL]=useState(false);
+  const go=async()=>{if(np.length<4){setE("新密碼至少 4 個字元");return}if(np===stu.sid){setE("新密碼不能和學號一樣");return}if(np!==np2){setE("兩次密碼不一致");return}setL(true);setE("");try{const r=await apiG({action:"changepw",sid:stu.sid,oldpw:stu.sid,newpw:np});if(r.status==="ok")onOk();else setE(r.message||"失敗")}catch(e){setE("網路錯誤")}setL(false)};
+  return(<div className="card" style={{maxWidth:420,marginTop:50,textAlign:"center"}}><div style={{fontSize:48,marginBottom:8}}>🔑</div><h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>首次登入，請修改密碼</h2><p style={{fontSize:14,color:"#94a3b8",marginBottom:20}}>Hi {stu.name}，為了帳號安全請設定新密碼</p><div style={{textAlign:"left",marginBottom:16}}><label className="fl">新密碼（至少 4 字元）</label><input type="password" className="fi" placeholder="輸入新密碼" value={np} onChange={e=>setN(e.target.value)}/></div><div style={{textAlign:"left",marginBottom:20}}><label className="fl">確認新密碼</label><input type="password" className="fi" placeholder="再輸入一次" value={np2} onChange={e=>setN2(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()}/></div>{err&&<p className="em">⚠️ {err}</p>}<button className="bp" onClick={go} disabled={ld}>{ld?<><span className="ld"/>儲存中...</>:"確認修改 ✓"}</button></div>);
 }
 
-// 回傳成績到 Google Sheet
-async function submitToSheet(student, score, record) {
-  if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes("在這裡貼上")) return "skip";
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sid: student.sid,
-        name: student.name,
-        score: score,
-        total: quizData.length,
-        record: record.map(r => ({ correct: r.correct }))
-      })
-    });
-    return "ok";
-  } catch (e) {
-    console.error("Submit error:", e);
-    return "error";
-  }
+function Quiz({stu,onEnd}){
+  const[c,setC]=useState(0);const[sel,setSel]=useState(null);const[done,setDone]=useState(false);const[sc,setSc]=useState(0);const[ht,setHt]=useState(false);const[rec,setRec]=useState([]);const[opts,setOpts]=useState([]);
+  useEffect(()=>{setOpts(shuf(Q[c].o))},[c]);
+  const pick=i=>{if(done)return;setSel(i);setDone(true);if(opts[i].k)setSc(s=>s+1);setRec(r=>[...r,{qi:c,ct:opts[i].t,ok:!!opts[i].k}])};
+  const nxt=()=>{if(c<Q.length-1){setC(x=>x+1);setSel(null);setDone(false);setHt(false)}else{onEnd(rec.reduce((a,r)=>a+(r.ok?1:0),0),rec)}};
+  const q=Q[c];const pct=((c+1)/Q.length)*100;
+  return(<div className="card" style={{maxWidth:640}} key={c}>
+    <div className="sbar"><span>👤 {stu.name}</span><span className="sep">|</span><span className="dim">{stu.sid}</span><span className="sep">|</span><span className="cls">{stu.cls}</span></div>
+    <div className="pr"><span className="pl">{c+1} / {Q.length}</span><span className="si">🏅 {sc} 分</span></div>
+    <div className="pb"><div className="pf" style={{width:pct+"%"}}/></div>
+    <h2 className="qt">{q.q}</h2>
+    {!done&&<button className="hb" onClick={()=>setHt(!ht)}>{ht?"💡 "+q.h:"💡 需要提示嗎？"}</button>}
+    <div className="oc">{opts.map((o,i)=>{let cn="ob";if(done){if(o.k)cn+=" ok";else if(i===sel)cn+=" no";else cn+=" dm"}return(<button key={i} className={cn} onClick={()=>pick(i)} disabled={done}><span className="ol">{String.fromCharCode(65+i)}</span><span style={{flex:1}}>{o.t}</span>{done&&i===sel&&<span style={{marginLeft:"auto",fontSize:18}}>{o.k?"✅":"❌"}</span>}{done&&o.k&&i!==sel&&<span style={{marginLeft:"auto",fontSize:18}}>✅</span>}</button>)})}</div>
+    {done&&<div className={"fb "+(opts[sel]?.k?"ok":"no")}><span style={{fontSize:24}}>{opts[sel]?.k?"🎉":"😅"}</span><span style={{fontWeight:700,color:opts[sel]?.k?"#4ade80":"#f87171",fontSize:15}}>{opts[sel]?.k?"答對了！":"答錯了！"}</span><span style={{color:"#64748b",fontSize:12}}>詳解於測驗結束後公布</span></div>}
+    {done&&<button className="bp" onClick={nxt}>{c<Q.length-1?"下一題 →":"查看成績 🎯"}</button>}
+  </div>);
 }
 
-function StudentForm({ onSubmit }) {
-  const [sid, setSid] = useState("");
-  const [name, setName] = useState("");
-  const [showErr, setShowErr] = useState(false);
-
-  const handle = () => {
-    if (!sid.trim() || !name.trim()) { setShowErr(true); return; }
-    onSubmit({ sid: sid.trim(), name: name.trim() });
-  };
-
-  return (
-    <div className="card" style={{ maxWidth: 440, marginTop: 60, textAlign: "center" }}>
-      <div style={{ fontSize: 56, marginBottom: 12 }}>🖥️</div>
-      <h1 style={{ fontSize: 30, fontWeight: 900, marginBottom: 10, letterSpacing: 1 }}>資訊素養大挑戰</h1>
-      <p style={{ fontSize: 15, color: "#94a3b8", marginBottom: 20, lineHeight: 1.6 }}>
-        20 題趣味問答，測試你的電腦 &amp; 網路知識！
-      </p>
-      <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 28, flexWrap: "wrap" }}>
-        <span className="tag">📝 20 題</span>
-        <span className="tag">⏱ 約 10 分鐘</span>
-        <span className="tag">💡 附提示</span>
-      </div>
-      <div style={{ textAlign: "left", marginBottom: 20 }}>
-        <label className="field-label">學號 *</label>
-        <input className={`field-input ${showErr && !sid.trim() ? "error" : ""}`} placeholder="請輸入學號" value={sid} onChange={e => setSid(e.target.value)} onKeyDown={e => e.key === "Enter" && document.getElementById("ni")?.focus()} />
-      </div>
-      <div style={{ textAlign: "left", marginBottom: 28 }}>
-        <label className="field-label">姓名 *</label>
-        <input id="ni" className={`field-input ${showErr && !name.trim() ? "error" : ""}`} placeholder="請輸入姓名" value={name} onChange={e => setName(e.target.value)} onKeyDown={e => e.key === "Enter" && handle()} />
-      </div>
-      {showErr && (!sid.trim() || !name.trim()) && <p className="error-msg">⚠️ 請填寫學號和姓名才能開始測驗</p>}
-      <button className="btn-primary" onClick={handle}>開始測驗 →</button>
-    </div>
-  );
+function Result({stu,sc,rec,onOut}){
+  const g=grd(sc,Q.length);const[sh,setSh]=useState(false);const[ss,setSs]=useState("ld");
+  useEffect(()=>{apiP({action:"submit_score",sid:stu.sid,name:stu.name,className:stu.cls,score:sc,total:Q.length,record:rec.map(r=>({correct:r.ok}))}).then(()=>setSs("ok")).catch(()=>setSs("er"))},[]);
+  return(<div className="card" style={{maxWidth:580,textAlign:"center",marginTop:20}}>
+    <div className="sbar" style={{justifyContent:"center",marginBottom:20}}><span>👤 {stu.name}</span><span className="sep">|</span><span className="dim">{stu.sid}</span><span className="sep">|</span><span className="cls">{stu.cls}</span></div>
+    <div style={{fontSize:56,marginBottom:4}}>{g.e}</div><h1 style={{fontSize:28,fontWeight:900,color:g.c,marginBottom:6}}>{g.t}</h1><p style={{fontSize:15,color:"#94a3b8",marginBottom:24}}>{g.s}</p>
+    <div className="sr"><div className="n">{sc}</div><div className="d">/ {Q.length}</div></div>
+    <div className="stw"><div className="stb"><div className="stn" style={{color:"#4ade80"}}>{sc}</div><div className="stl">答對</div></div><div className="stb"><div className="stn" style={{color:"#f87171"}}>{Q.length-sc}</div><div className="stl">答錯</div></div><div className="stb"><div className="stn" style={{color:"#facc15"}}>{Math.round(sc/Q.length*100)}%</div><div className="stl">正確率</div></div></div>
+    {ss==="ld"&&<div className="sm ld"><span className="ld"/>正在回傳成績...</div>}
+    {ss==="ok"&&<div className="sm ok">✅ 成績已成功回傳！</div>}
+    {ss==="er"&&<div className="sm er">⚠️ 回傳失敗，請截圖給老師</div>}
+    <button className="rt" onClick={()=>setSh(!sh)}>{sh?"收起詳解 ▲":"📖 查看每題詳解 ▼"}</button>
+    {sh&&<div className="rl">{rec.map((r,i)=>{const qd=Q[r.qi];const co=qd.o.find(x=>x.k);return(<div key={i} className={"ri "+(r.ok?"ok":"no")}><div className="rh"><span>{r.ok?"✅":"❌"}</span><span className="rqn">Q{i+1}</span></div><p className="rqt">{qd.q}</p>{!r.ok&&<div className="ry"><span style={{color:"#f87171",fontWeight:600}}>你的回答：</span>{r.ct}</div>}<div className="rc"><span style={{color:"#4ade80",fontWeight:600}}>正確答案：</span>{co.t}</div><div className="rr">{co.r}</div></div>)})}</div>}
+    <button className="bp" style={{marginTop:12}} onClick={onOut}>登出 🔄</button>
+  </div>);
 }
 
-function QuizPhase({ student, onFinish }) {
-  const [cur, setCur] = useState(0);
-  const [sel, setSel] = useState(null);
-  const [answered, setAnswered] = useState(false);
-  const [score, setScore] = useState(0);
-  const [showHint, setShowHint] = useState(false);
-  const [record, setRecord] = useState([]);
-  const [opts, setOpts] = useState([]);
-
-  useEffect(() => { setOpts(shuffleArray(quizData[cur].opts)); }, [cur]);
-
-  const pick = idx => {
-    if (answered) return;
-    setSel(idx); setAnswered(true);
-    const correct = opts[idx].ok;
-    if (correct) setScore(s => s + 1);
-    setRecord(r => [...r, { qIdx: cur, chosenText: opts[idx].text, correct }]);
-  };
-
-  const next = () => {
-    if (cur < quizData.length - 1) {
-      setCur(c => c + 1); setSel(null); setAnswered(false); setShowHint(false);
-    } else {
-      const fs = record.reduce((s, r) => s + (r.correct ? 1 : 0), 0);
-      onFinish(fs, record);
-    }
-  };
-
-  const q = quizData[cur];
-  const pct = ((cur + 1) / quizData.length) * 100;
-
-  return (
-    <div className="card" style={{ maxWidth: 640 }} key={cur}>
-      <div className="student-bar">
-        <span>👤 {student.name}</span><span className="sep">|</span><span className="sid">{student.sid}</span>
-      </div>
-      <div className="progress-row">
-        <span className="progress-label">{cur + 1} / {quizData.length}</span>
-        <span className="score-inline">🏅 {score} 分</span>
-      </div>
-      <div className="progress-bar"><div className="progress-fill" style={{ width: pct + "%" }} /></div>
-      <h2 className="question-text">{q.q}</h2>
-      {!answered && <button className="hint-btn" onClick={() => setShowHint(!showHint)}>{showHint ? "💡 " + q.hint : "💡 需要提示嗎？"}</button>}
-      <div className="opts-col">
-        {opts.map((opt, idx) => {
-          let cls = "opt-btn";
-          if (answered) { if (opt.ok) cls += " correct"; else if (idx === sel) cls += " wrong"; else cls += " dim"; }
-          return (
-            <button key={idx} className={cls} onClick={() => pick(idx)} disabled={answered}>
-              <span className="opt-label">{String.fromCharCode(65 + idx)}</span>
-              <span style={{ flex: 1 }}>{opt.text}</span>
-              {answered && idx === sel && <span style={{ marginLeft: "auto", fontSize: 18 }}>{opt.ok ? "✅" : "❌"}</span>}
-              {answered && opt.ok && idx !== sel && <span style={{ marginLeft: "auto", fontSize: 18 }}>✅</span>}
-            </button>
-          );
-        })}
-      </div>
-      {answered && (
-        <div className={`feedback-banner ${opts[sel]?.ok ? "ok" : "no"}`}>
-          <span style={{ fontSize: 24 }}>{opts[sel]?.ok ? "🎉" : "😅"}</span>
-          <span style={{ fontWeight: 700, color: opts[sel]?.ok ? "#4ade80" : "#f87171", fontSize: 15 }}>{opts[sel]?.ok ? "答對了！" : "答錯了！"}</span>
-          <span style={{ color: "#64748b", fontSize: 12 }}>詳解將在測驗結束後公布</span>
-        </div>
-      )}
-      {answered && <button className="btn-primary" onClick={next}>{cur < quizData.length - 1 ? "下一題 →" : "查看成績 🎯"}</button>}
-    </div>
-  );
+function App(){
+  const[ph,setPh]=useState("login");const[stu,setStu]=useState(null);const[fs,setFs]=useState(0);const[rec,setRec]=useState([]);
+  if(ph==="login")return<Login onOk={s=>{setStu(s);setPh(s.chg?"chgpw":"quiz")}}/>;
+  if(ph==="chgpw")return<ChgPw stu={stu} onOk={()=>setPh("quiz")}/>;
+  if(ph==="quiz")return<Quiz stu={stu} onEnd={(s,r)=>{setFs(s);setRec(r);setPh("result")}}/>;
+  return<Result stu={stu} sc={fs} rec={rec} onOut={()=>{setPh("login");setStu(null);setFs(0);setRec([])}}/>;
 }
-
-function ResultPhase({ student, score, record, onRestart }) {
-  const grade = getGrade(score, quizData.length);
-  const [show, setShow] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState("loading");
-
-  useEffect(() => {
-    submitToSheet(student, score, record).then(s => setSubmitStatus(s));
-  }, []);
-
-  return (
-    <div className="card" style={{ maxWidth: 580, textAlign: "center", marginTop: 20 }}>
-      <div className="student-bar" style={{ justifyContent: "center", marginBottom: 20 }}>
-        <span>👤 {student.name}</span><span className="sep">|</span><span className="sid">{student.sid}</span>
-      </div>
-      <div style={{ fontSize: 56, marginBottom: 4 }}>{grade.emoji}</div>
-      <h1 style={{ fontSize: 28, fontWeight: 900, color: grade.color, marginBottom: 6 }}>{grade.title}</h1>
-      <p style={{ fontSize: 15, color: "#94a3b8", marginBottom: 24 }}>{grade.sub}</p>
-
-      <div className="score-ring"><div className="num">{score}</div><div className="den">/ {quizData.length}</div></div>
-
-      <div className="stat-row">
-        <div className="stat-box"><div className="stat-num" style={{ color: "#4ade80" }}>{score}</div><div className="stat-label">答對</div></div>
-        <div className="stat-box"><div className="stat-num" style={{ color: "#f87171" }}>{quizData.length - score}</div><div className="stat-label">答錯</div></div>
-        <div className="stat-box"><div className="stat-num" style={{ color: "#facc15" }}>{Math.round((score / quizData.length) * 100)}%</div><div className="stat-label">正確率</div></div>
-      </div>
-
-      {submitStatus === "loading" && <div className="submit-status loading">📤 正在回傳成績給老師...</div>}
-      {submitStatus === "ok" && <div className="submit-status ok">✅ 成績已成功回傳！老師可以看到你的成績了。</div>}
-      {submitStatus === "error" && <div className="submit-status err">⚠️ 成績回傳失敗，請截圖給老師。</div>}
-      {submitStatus === "skip" && <div className="submit-status loading">📋 成績僅顯示於此畫面，請截圖保存。</div>}
-
-      <button className="review-toggle" onClick={() => setShow(!show)}>{show ? "收起詳解 ▲" : "📖 查看每題詳解 ▼"}</button>
-      {show && (
-        <div className="review-list">
-          {record.map((r, i) => {
-            const qd = quizData[r.qIdx]; const co = qd.opts.find(o => o.ok);
-            return (
-              <div key={i} className={`review-item ${r.correct ? "ok" : "no"}`}>
-                <div className="review-header"><span>{r.correct ? "✅" : "❌"}</span><span className="review-qnum">Q{i + 1}</span></div>
-                <p className="review-qtext">{qd.q}</p>
-                {!r.correct && <div className="review-your"><span style={{ color: "#f87171", fontWeight: 600 }}>你的回答：</span>{r.chosenText}</div>}
-                <div className="review-correct"><span style={{ color: "#4ade80", fontWeight: 600 }}>正確答案：</span>{co.text}</div>
-                <div className="review-rat">{co.rat}</div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-      <button className="btn-primary" style={{ marginTop: 12 }} onClick={onRestart}>再挑戰一次 🔄</button>
-    </div>
-  );
-}
-
-function App() {
-  const [phase, setPhase] = useState("form");
-  const [student, setStudent] = useState(null);
-  const [finalScore, setFinalScore] = useState(0);
-  const [record, setRecord] = useState([]);
-
-  if (phase === "form") return <StudentForm onSubmit={s => { setStudent(s); setPhase("quiz"); }} />;
-  if (phase === "quiz") return <QuizPhase student={student} onFinish={(sc, rec) => { setFinalScore(sc); setRecord(rec); setPhase("result"); }} />;
-  return <ResultPhase student={student} score={finalScore} record={record} onRestart={() => { setPhase("form"); setStudent(null); setFinalScore(0); setRecord([]); }} />;
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
