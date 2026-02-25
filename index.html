@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>資訊素養大挑戰</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖥️</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans TC','Helvetica Neue',sans-serif;background:linear-gradient(145deg,#0f0f1a 0%,#1a1a2e 40%,#16213e 100%);min-height:100vh;color:#e2e8f0;-webkit-font-smoothing:antialiased}
+body{font-family:'Noto Sans TC',sans-serif;background:linear-gradient(145deg,#0f0f1a,#1a1a2e,#16213e);min-height:100vh;color:#e2e8f0}
 #root{min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px}
 .card{background:rgba(255,255,255,0.04);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:28px 24px;width:100%;animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sbar{display:flex;gap:8px;align-items:center;font-size:13px;color:#a5b4fc;font-weight:600;margin-bottom:12px;padding:8px 12px;background:rgba(129,140,248,0.08);border-radius:10px;flex-wrap:wrap}
 .sbar .sep{color:#475569}.sbar .dim{color:#94a3b8}.sbar .cls{color:#818cf8}
-label.fl{display:block;font-size:13px;font-weight:700;color:#a5b4fc;margin-bottom:6px;letter-spacing:.5px}
+label.fl{display:block;font-size:13px;font-weight:700;color:#a5b4fc;margin-bottom:6px}
 input.fi{width:100%;padding:12px 14px;border-radius:12px;border:2px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.25);color:#e2e8f0;font-size:15px;outline:none;transition:border-color .2s;font-family:inherit}
 input.fi:focus{border-color:#818cf8}input.fi.err{border-color:#f87171}
-.bp{background:linear-gradient(135deg,#818cf8,#6366f1);color:#fff;border:none;border-radius:14px;padding:14px 40px;font-size:17px;font-weight:700;cursor:pointer;letter-spacing:1px;width:100%;font-family:inherit;transition:transform .1s,box-shadow .2s}
+.bp{background:linear-gradient(135deg,#818cf8,#6366f1);color:#fff;border:none;border-radius:14px;padding:14px 40px;font-size:17px;font-weight:700;cursor:pointer;width:100%;font-family:inherit;transition:transform .1s,box-shadow .2s}
 .bp:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(99,102,241,.35)}.bp:active{transform:translateY(0)}.bp:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .pr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}.pl{font-size:13px;color:#94a3b8;font-weight:600}.si{font-size:13px;color:#fbbf24;font-weight:700}
 .pb{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-bottom:24px}.pf{height:100%;background:linear-gradient(90deg,#818cf8,#6366f1);border-radius:3px;transition:width .4s ease}
-.qt{font-size:18px;font-weight:700;color:#e2e8f0;line-height:1.7;margin:0 0 16px}
+.qt{font-size:18px;font-weight:700;line-height:1.7;margin:0 0 16px}
 .hb{background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);color:#fbbf24;border-radius:12px;padding:10px 16px;font-size:14px;cursor:pointer;margin-bottom:20px;width:100%;text-align:left;line-height:1.5;font-weight:500;font-family:inherit}
 .oc{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
 .ob{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.04);border:2px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .2s;font-size:15px;color:#cbd5e1;line-height:1.5;font-family:inherit}
@@ -32,7 +31,7 @@ input.fi:focus{border-color:#818cf8}input.fi.err{border-color:#f87171}
 .fb{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:14px;border:1px solid;margin-bottom:16px;flex-wrap:wrap}
 .fb.ok{background:rgba(74,222,128,0.08);border-color:#4ade80}.fb.no{background:rgba(248,113,113,0.08);border-color:#f87171}
 .sr{width:120px;height:120px;border-radius:50%;background:rgba(129,140,248,0.1);border:4px solid #818cf8;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 24px}
-.sr .n{font-size:42px;font-weight:900;color:#e2e8f0}.sr .d{font-size:16px;color:#94a3b8;margin-top:-4px}
+.sr .n{font-size:42px;font-weight:900}.sr .d{font-size:16px;color:#94a3b8;margin-top:-4px}
 .stw{display:flex;gap:12px;justify-content:center;margin-bottom:24px}
 .stb{background:rgba(255,255,255,0.04);border-radius:14px;padding:12px 20px;flex:1;max-width:120px;text-align:center}
 .stn{font-size:26px;font-weight:800}.stl{font-size:12px;color:#94a3b8}
@@ -41,11 +40,11 @@ input.fi:focus{border-color:#818cf8}input.fi.err{border-color:#f87171}
 .rl{text-align:left;margin-bottom:16px;max-height:500px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}
 .ri{background:rgba(0,0,0,0.25);border-radius:12px;padding:14px 16px;border-left:4px solid}.ri.ok{border-left-color:#4ade80}.ri.no{border-left-color:#f87171}
 .rh{display:flex;gap:6px;align-items:center;margin-bottom:6px}.rqn{font-size:13px;font-weight:800;color:#a5b4fc}
-.rqt{font-size:14px;color:#e2e8f0;line-height:1.6;margin:0 0 8px}
+.rqt{font-size:14px;line-height:1.6;margin:0 0 8px}
 .ry{font-size:13px;color:#cbd5e1;margin-bottom:4px;padding:6px 10px;background:rgba(248,113,113,0.08);border-radius:8px}
 .rc{font-size:13px;color:#cbd5e1;margin-bottom:4px;padding:6px 10px;background:rgba(74,222,128,0.08);border-radius:8px}
 .rr{font-size:13px;color:#94a3b8;line-height:1.6;margin-top:6px;font-style:italic}
-.em{color:#f87171;font-size:13px;margin-bottom:12px;text-align:left}
+.em{color:#f87171;font-size:13px;margin-bottom:12px}
 .sm{padding:10px 16px;border-radius:10px;font-size:13px;margin-bottom:16px;text-align:center;font-weight:600}
 .sm.ok{background:rgba(74,222,128,0.1);color:#4ade80}.sm.er{background:rgba(248,113,113,0.1);color:#f87171}.sm.ld{background:rgba(129,140,248,0.1);color:#a5b4fc}
 .ld{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.2);border-top-color:#a5b4fc;border-radius:50%;animation:spin .6s linear infinite;margin-right:8px;vertical-align:middle}
@@ -57,101 +56,76 @@ input.fi:focus{border-color:#818cf8}input.fi.err{border-color:#f87171}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <script type="text/babel">
-const{useState,useEffect}=React;
+const{useState,useEffect,useRef}=React;
 
-// 成績回傳用的 Google Apps Script 網址
-const SCORE_API="https://script.google.com/macros/s/AKfycbxnFE-1AgjfQV6kPD-xLqqZO0i7bEKvumretjxlgPWhSbj7HKZ1UO_t95TW2k5VDP43jg/exec";
+// ⚠️ 老師：貼上你的 Google Apps Script 部署網址
+const BRIDGE_URL="https://script.google.com/macros/s/AKfycbxnFE-1AgjfQV6kPD-xLqqZO0i7bEKvumretjxlgPWhSbj7HKZ1UO_t95TW2k5VDP43jg/exec";
 
-// ===== 學生名單（登入驗證用）=====
-const STUDENTS={
-"114512301":{n:"黃文廷",c:"1年C班"},"114512302":{n:"廖翊竣",c:"1年C班"},"114512303":{n:"陳柏竣",c:"1年C班"},
-"114512304":{n:"陳心婕",c:"1年C班"},"114512305":{n:"孫若芸",c:"1年C班"},"114512306":{n:"温雯萱",c:"1年C班"},
-"114512307":{n:"柯俞安",c:"1年C班"},"114512308":{n:"胡鈺柔",c:"1年C班"},"114512309":{n:"黃馨霈",c:"1年C班"},
-"114512310":{n:"許芷寧",c:"1年C班"},"114512311":{n:"蔡咏倢",c:"1年C班"},"114512312":{n:"李苡甄",c:"1年C班"},
-"114512313":{n:"廖芷妍",c:"1年C班"},"114512314":{n:"謝緹雅",c:"1年C班"},"114512315":{n:"林恩儀",c:"1年C班"},
-"114512316":{n:"徐若筑",c:"1年C班"},"114512317":{n:"黃咨菱",c:"1年C班"},"114512318":{n:"田倩然",c:"1年C班"},
-"114512319":{n:"范硯絜",c:"1年C班"},"114512320":{n:"蔡莘菲",c:"1年C班"},"114512321":{n:"盧宜欣",c:"1年C班"},
-"114512322":{n:"邱宥潔",c:"1年C班"},"114512323":{n:"陳紜媗",c:"1年C班"},"114512324":{n:"蔡佩霓",c:"1年C班"},
-"114512325":{n:"余品宣",c:"1年C班"},"114512326":{n:"廖品淳",c:"1年C班"},"114512327":{n:"林亞姮",c:"1年C班"},
-"114512328":{n:"高瑜芸",c:"1年C班"},"114512329":{n:"何薏溱",c:"1年C班"},"114512330":{n:"王育伶",c:"1年C班"},
-"114512331":{n:"王湘瑩",c:"1年C班"},"114512332":{n:"林品萱",c:"1年C班"},"114512333":{n:"羅仁宇",c:"1年C班"},
-"114512334":{n:"陳宣瑋",c:"1年C班"},"114512335":{n:"吳秉叡",c:"1年C班"},"114512336":{n:"邵子恩",c:"1年C班"},
-"114512337":{n:"李承學",c:"1年C班"},"114512338":{n:"王晟安",c:"1年C班"},"114512339":{n:"李翊瑄",c:"1年C班"},
-"114512340":{n:"林湘穎",c:"1年C班"},"114512341":{n:"陳品宏",c:"1年C班"},"114512342":{n:"陳亭憲",c:"1年C班"},
-"114512343":{n:"許品博",c:"1年C班"},"114512344":{n:"楊閔安",c:"1年C班"},
-"113512438":{n:"侯欣宜",c:"1年D班"},"114512401":{n:"徐子晴",c:"1年D班"},"114512402":{n:"郭亦涵",c:"1年D班"},
-"114512403":{n:"連育翎",c:"1年D班"},"114512404":{n:"莊沁綾",c:"1年D班"},"114512405":{n:"古妮瑾",c:"1年D班"},
-"114512406":{n:"林湘庭",c:"1年D班"},"114512407":{n:"李芷瑛",c:"1年D班"},"114512408":{n:"蘇子晴",c:"1年D班"},
-"114512409":{n:"林格菲",c:"1年D班"},"114512410":{n:"葉齊恩",c:"1年D班"},"114512411":{n:"簡榆憓",c:"1年D班"},
-"114512412":{n:"黃郁婷",c:"1年D班"},"114512413":{n:"黃筠媗",c:"1年D班"},"114512414":{n:"陳筱淳",c:"1年D班"},
-"114512415":{n:"卓莉鈞",c:"1年D班"},"114512416":{n:"林珈欣",c:"1年D班"},"114512417":{n:"邱禹婷",c:"1年D班"},
-"114512418":{n:"王瀅瑄",c:"1年D班"},"114512419":{n:"宋潔庭",c:"1年D班"},"114512420":{n:"張可弦",c:"1年D班"},
-"114512421":{n:"商乙筑",c:"1年D班"},"114512422":{n:"林沛璇",c:"1年D班"},"114512423":{n:"盧沛青",c:"1年D班"},
-"114512424":{n:"張瑄榕",c:"1年D班"},"114512425":{n:"王韋茜",c:"1年D班"},"114512426":{n:"王宜淨",c:"1年D班"},
-"114512427":{n:"蔡宇晴",c:"1年D班"},"114512428":{n:"吳沅芷",c:"1年D班"},"114512430":{n:"李宜庭",c:"1年D班"},
-"114512431":{n:"汪芷萱",c:"1年D班"},"114512432":{n:"張璦涵",c:"1年D班"},"114512433":{n:"黃羽汶",c:"1年D班"},
-"114512434":{n:"姜妤瑄",c:"1年D班"},"114512435":{n:"蔡宜潔",c:"1年D班"},"114512436":{n:"郭倢妤",c:"1年D班"},
-"114512437":{n:"石蕎恩",c:"1年D班"},"114512438":{n:"沈仟雅",c:"1年D班"},"114512439":{n:"陳芊涵",c:"1年D班"},
-"114512440":{n:"黃芊芊",c:"1年D班"},"114512441":{n:"潘姳諼",c:"1年D班"},"114512443":{n:"王孜羽",c:"1年D班"},
-"guest":{n:"測試帳號",c:"測試"}
-};
-
-// 密碼管理（用 localStorage）
-// 預設密碼 = 學號，改過後存在瀏覽器
-function getPw(sid){
-  const saved=localStorage.getItem("pw_"+sid);
-  return saved||sid; // 預設密碼=學號
+// ===== iframe 橋接通訊 =====
+let bridge=null,bridgeReady=false,pending={};
+function initBridge(){
+  const f=document.createElement("iframe");
+  f.src=BRIDGE_URL;f.style.display="none";
+  document.body.appendChild(f);bridge=f;
+  window.addEventListener("message",e=>{
+    if(e.data&&e.data.ready){bridgeReady=true;return}
+    if(e.data&&e.data.id&&pending[e.data.id]){
+      const{ok,fail}=pending[e.data.id];delete pending[e.data.id];
+      if(e.data.error)fail(new Error(e.data.error));else ok(e.data.result);
+    }
+  });
 }
-function setPw(sid,pw){localStorage.setItem("pw_"+sid,pw)}
-function hasChangedPw(sid){return !!localStorage.getItem("pw_"+sid)}
+function callServer(action,params){
+  return new Promise((ok,fail)=>{
+    if(!bridge){fail(new Error("bridge not init"));return}
+    const waitReady=()=>{
+      if(bridgeReady){
+        const id=Math.random().toString(36).slice(2);
+        pending[id]={ok,fail};
+        setTimeout(()=>{if(pending[id]){delete pending[id];fail(new Error("timeout"))}},20000);
+        bridge.contentWindow.postMessage({id,action,...params},"*");
+      } else setTimeout(waitReady,200);
+    };
+    waitReady();
+  });
+}
 
 const Q=[
-{q:"買電腦時，店員激動地推銷：「這台的『大腦』超級聰明，跑很雷的隊友也不怕卡！」請問這個「大腦」是指哪一個零件？",o:[{t:"硬碟 (HDD/SSD)",r:"硬碟是負責長期裝東西的「倉庫」，它記性很好但不負責動腦思考喔。",k:0},{t:"中央處理器 (CPU)",r:"沒錯！CPU 就是整台電腦的智商擔當，負責算數學跟指揮大家做事。",k:1},{t:"主記憶體 (RAM)",r:"記憶體比較像是暫時放資料的「書桌」，桌子再大也不會幫你寫作業。",k:0},{t:"顯示卡 (GPU)",r:"顯示卡是負責畫畫的「美術大師」，不是總指揮。",k:0}],h:"它的知名品牌有 Intel (像 i5、i7) 還有 AMD 喔！"},
-{q:"你急著上線打排位賽，結果電腦開機等了 3 分鐘，泡麵都快糊了！為了解救開機速度，你最該把系統裝在哪裡？",o:[{t:"傳統硬碟 (HDD)",r:"傳統硬碟是用磁盤慢慢轉，像在圖書館慢慢找書，速度超級慢！",k:0},{t:"固態硬碟 (SSD)",r:"正解！SSD 裡面沒有會轉的零件，讀取資料就像開了任意門，開機只要 5 秒鐘！",k:1},{t:"雲端硬碟 (Google Drive)",r:"雲端是用來備份檔案的，你的電腦還是得靠自己的硬碟來開機呀。",k:0},{t:"行動電源",r:"行動電源只能給你電，不能給你速度啦！",k:0}],h:"找那種裡面沒有機械構造、讀取速度快如閃電的酷東西。"},
-{q:"你一邊聽 Spotify，一邊開著 30 個 Google 分頁找報告資料，電腦突然卡死不動，連滑鼠都變樹懶。這通常是因為哪裡的「空間被塞爆了」？",o:[{t:"主記憶體 (RAM)",r:"答對了！這就像你的「書桌」太小，攤開太多課本放不下，電腦就會大當機。",k:1},{t:"硬碟 (Storage)",r:"硬碟是用來長久存檔的，純粹開太多分頁通常是先耗盡「暫存空間(書桌)」。",k:0},{t:"螢幕尺寸",r:"螢幕小只會讓你眼睛酸，不會讓電腦卡死喔。",k:0},{t:"電源供應器",r:"電源只是供電，跟能同時開幾個分頁無關。",k:0}],h:"想像你的「書桌」面積有限，放太多東西就會滿出來，必須重開機(收書包)清空。"},
-{q:"如果電腦是一個大企業，誰是那個負責管整間公司、指派硬體工作，還會給你一個漂亮視窗介面點擊的「總經理」？",o:[{t:"防毒軟體 (Anti-Virus)",r:"防毒軟體比較像是大樓警衛，負責抓壞人，不管公司營運。",k:0},{t:"作業系統 (OS)",r:"沒錯！像 Windows、macOS 都是作業系統，沒有它，軟硬體就會互相聽不懂對方講話。",k:1},{t:"瀏覽器 (Chrome)",r:"瀏覽器只是讓你上網的工具，它是總經理底下的一名小員工而已。",k:0},{t:"文書軟體 (Word)",r:"Word 負責幫你打報告，不負責管硬體。",k:0}],h:"你每天開機第一眼看到在轉圈圈的 Windows 就是它。"},
-{q:"網購推銷：「這台有 1TB 超大空間！」請問 1TB 大概等於多少 GB？",o:[{t:"100 GB",r:"太小看 TB 了！",k:0},{t:"1000 GB",r:"正解！1 TB = 1000 GB！",k:1},{t:"10000 GB",r:"那叫做 10TB。",k:0},{t:"10 GB",r:"這連一個手遊都裝不下！",k:0}],h:"T (Tera) 是 G (Giga) 的下一個大單位，換算通常是加三個零。"},
-{q:"為了玩《黑神話：悟空》或《特戰英豪》，你不想畫面卡成 PPT，買筆電時你絕對要確認它有帶上哪位「神級繪圖大師」？",o:[{t:"高級視訊鏡頭",r:"視訊鏡頭只負責拍你的臉，不負責處理遊戲裡的 3D 動畫。",k:0},{t:"獨立顯示卡 (獨顯)",r:"對！獨顯就是專門外包處理超炫 3D 特效的大師！",k:1},{t:"超高音質喇叭",r:"聲音再好聽，畫面卡成狗也是玩不下去的。",k:0},{t:"觸控螢幕",r:"打 3D 大作通常用鍵盤滑鼠，觸控螢幕幫不上忙。",k:0}],h:"像是 NVIDIA 的 RTX 3070 這種名字看起來很帥的零件就是了。"},
-{q:"在網路上傳 LINE 給曖昧對象，訊息之所以能準確送到對方手機裡不迷路，是因為每台設備都有一個專屬的「數位門牌號碼」，這叫做？",o:[{t:"身分證字號",r:"這是政府發給你的，網路世界不認這個喔。",k:0},{t:"IP 位址",r:"正確！IP 就是網路上的門牌，讓封包知道要送到哪個地址。",k:1},{t:"GPS 定位",r:"GPS 是用來導航找實體位置的，不是網路傳資料用的門牌。",k:0},{t:"HTTPS",r:"這是一種加密傳輸的規則，不是設備的門牌號碼。",k:0}],h:"一串看起來像「192.168.1.1」的數字密碼。"},
-{q:"朋友臭屁地說：「我的照片都存在雲端啦，不怕不見！」請問「雲端」到底在哪裡？",o:[{t:"在天上的雲層裡",r:"太有想像力了！但數位資料無法存放在水氣裡。",k:0},{t:"在遠端科技公司的超大冷氣機房裡",r:"沒錯！雲端其實就是「別人的超強電腦」，資料存在安全的機房裡。",k:1},{t:"藏在手機螢幕玻璃夾層中",r:"這根本是科幻片情節！",k:0},{t:"漂浮在 Wi-Fi 訊號中",r:"Wi-Fi 只是傳輸通道，不能拿來存放東西。",k:0}],h:"它其實是非常巨大、有冷氣吹的實體大樓機房。"},
-{q:"信箱收到：「親愛的用戶，您的 Netflix 帳戶異常，請點擊連結輸入信用卡號解鎖！」這通常是哪種網路陷阱？",o:[{t:"DDoS 攻擊",r:"這通常是用大量流量癱瘓網站的攻擊，不會騙你的信用卡。",k:0},{t:"釣魚攻擊 (Phishing)",r:"超危險！駭客偽裝成官方，丟出誘餌騙你上鉤！",k:1},{t:"勒索軟體 (Ransomware)",r:"勒索軟體是把你的檔案鎖碼，逼你付比特幣當贖金。",k:0},{t:"實體駭客入侵",r:"駭客不用親自跑去你家，用 Email 就能騙到你。",k:0}],h:"駭客撒下誘餌，就等你不小心「上鉤」。"},
-{q:"為了不被駭客盜帳號，哪一種密碼設定方式最像「鋼鐵保險箱」？",o:[{t:"用自己的生日 (如 920520)",r:"駭客去你的 IG 看一下就知道你哪天生日了！",k:0},{t:"所有網站都用同一組密碼",r:"只要一個網站被破解，所有帳號都會像骨牌全倒！",k:0},{t:"大小寫英數加符號，每個網站密碼都不一樣",r:"正解！大幅增加暴力破解的難度！",k:1},{t:"把密碼寫在便利貼貼在螢幕旁",r:"這叫「物理外洩」，同學走過去全看到了！",k:0}],h:"密碼越複雜越難打，而且大門跟保險箱絕對不能用同一把鑰匙。"},
-{q:"期末報告死線快到了！你在網路上看到一篇超棒的文章想拿來用，怎樣做才不會被 Naichen 老師死當？",o:[{t:"整段複製貼上，裝作自己寫的",r:"這叫嚴重抄襲！老師用軟體一查就抓到了。",k:0},{t:"偷改掉幾個字就不算抄襲",r:"這叫「改寫抄襲」，沒標來源一樣違反學術規定！",k:0},{t:"用自己的話總結重點，並放上參考資料網址",r:"完美！尊重原作者並清楚交代來源！",k:1},{t:"把文章截圖放進報告裡",r:"用圖片也是引用，不標來源一樣母湯！",k:0}],h:"回想一下老師在報告格式規定裡的嚴厲提醒。"},
-{q:"最近大家都在玩 ChatGPT，這位超級 AI 助理是靠哪種魔法練成的？",o:[{t:"區塊鏈 (Blockchain)",r:"區塊鏈主要用來記帳和發行虛擬貨幣。",k:0},{t:"擴增實境 (AR)",r:"這是像寶可夢 GO 那樣的技術。",k:0},{t:"生成式人工智慧 (Generative AI)",r:"答對了！它學會了如何「生成」像人類講話的內容。",k:1},{t:"量子運算",r:"ChatGPT 還不需要量子電腦。",k:0}],h:"這項技術讓電腦能夠自己「產出、創造」新的內容。"},
-{q:"人還沒到家就用手機把冷氣打開；智慧手錶監控心跳。這種「萬物連上網」的魔法叫什麼？",o:[{t:"虛擬實境 (VR)",r:"VR 是戴頭盔進入虛擬世界，跟開冷氣無關。",k:0},{t:"物聯網 (IoT)",r:"沒錯！Internet of Things，讓物品都連上網路變聰明！",k:1},{t:"元宇宙 (Metaverse)",r:"元宇宙是虛擬社交空間，不是控制家電的。",k:0},{t:"比特幣 (Bitcoin)",r:"這是虛擬錢幣，不能幫你量心跳！",k:0}],h:"中文字面意思就是「物」品都「聯」上「網」路了。"},
-{q:"為了讓「自動駕駛車」能瞬間煞車，我們急需哪一種「超低延遲」通訊技術？",o:[{t:"3G 網路",r:"用 3G，車子可能已經撞上去了...",k:0},{t:"藍牙 (Bluetooth)",r:"藍牙距離太短，只能連耳機。",k:0},{t:"5G 通訊技術",r:"正確！5G 超低延遲，是自駕車的保命符！",k:1},{t:"紅外線 (IR)",r:"紅外線不能有東西擋住，馬路上行不通。",k:0}],h:"目前最新一代行動網路標準，比 4G 快幾十倍。"},
-{q:"哪一種未來科技被形容會「影分身之術」，可以同時走完迷宮所有路線？",o:[{t:"傳統超級電腦",r:"傳統電腦再強也是一次走一條路。",k:0},{t:"邊緣運算",r:"這只是把運算移到離你近的地方。",k:0},{t:"量子電腦 (Quantum Computer)",r:"沒錯！利用量子疊加態，運算力大爆發！",k:1},{t:"光纖網路",r:"光纖是傳輸線路，不具備運算能力。",k:0}],h:"名稱聽起來很有「漫威電影」物理學的感覺。"},
-{q:"報告打到一半電腦突然卡死，你最應該先嘗試的「IT 神聖儀式」是什麼？",o:[{t:"把硬碟拆下來吹一吹",r:"千萬不要！電腦會直接報銷！",k:0},{t:"將電腦重新開機 (Restart)",r:"正解！能解決 90% 的電腦小毛病！",k:1},{t:"用力拍打電腦主機三下",r:"這只對古老真空管電視有效！",k:0},{t:"立刻拔掉網路線",r:"除非被駭客攻擊，斷網不能解決卡死。",k:0}],h:"經典 IT 名言：「遇到問題，先＿＿試試看。」"},
-{q:"在家族 LINE 群組看到：「震驚！每天吃這顆水果，癌症都能治好！」你應該先做什麼？",o:[{t:"先轉傳給十個朋友",r:"這就是假新聞氾濫的元兇！",k:0},{t:"看底下有沒有長輩說「感恩分享」",r:"長輩的回覆不能當科學證據！",k:0},{t:"去事實查核中心 (如 MyGoPen、TFC) 查看看",r:"非常優秀！培養批判性思考是數位公民必備素養！",k:1},{t:"把標題改更聳動再發到 IG 限動",r:"這樣你也會變成散佈謠言的共犯！",k:0}],h:"不要輕易相信來源不明的文字，需要「客觀的驗證單位」。"},
-{q:"網購筆電看到「On board 記憶體 8GB」，這代表什麼？",o:[{t:"附贈免費衝浪板",r:"英文不是這樣翻的！",k:0},{t:"記憶體被銲死在主機板上，無法擴充！",r:"答對了！買之前一定要確認容量夠不夠！",k:1},{t:"這台可以帶上飛機",r:"所有筆電都能帶上飛機。",k:0},{t:"開機速度比別人快一倍",r:"銲接主機板上不代表速度變快。",k:0}],h:"想像書桌被強力膠黏在地板上，以後換不了大桌子。"},
-{q:"現在買新手機，通常只有一種「正反面都能插」的接孔，它叫什麼？",o:[{t:"USB Type-A",r:"這是傳統長方形 USB，每次都要插三次才對！",k:0},{t:"VGA 介面",r:"這是古老的藍色大頭影像線。",k:0},{t:"USB Type-C",r:"正確！連最新 iPhone 都改用它了！",k:1},{t:"耳機孔 (3.5mm)",r:"耳機孔是圓形的，很多手機都取消了。",k:0}],h:"最新蘋果手機被歐盟規定必須改成這種接孔。"},
-{q:"在星巴克連上免費公共 Wi-Fi 時，做哪件事最容易讓駭客把你的錢搬光？",o:[{t:"看 YouTube MV",r:"看影片不涉及輸入密碼，風險較低。",k:0},{t:"用 Google 查天氣",r:"查天氣是公開資訊，不會造成財產損失。",k:0},{t:"登入網路銀行轉帳",r:"千萬母湯！公共 Wi-Fi 很容易被駭客側錄！",k:1},{t:"看學校網站行事曆",r:"不需輸入帳密，單純瀏覽是安全的。",k:0}],h:"想想哪件事被駭客偷看到會讓你當場破產。"}
+{q:"買電腦時，店員說這台的「大腦」超聰明。這個「大腦」是指哪個零件？",o:[{t:"硬碟 (HDD/SSD)",r:"硬碟是「倉庫」，不負責動腦。",k:0},{t:"中央處理器 (CPU)",r:"沒錯！CPU 負責算數學跟指揮大家做事。",k:1},{t:"主記憶體 (RAM)",r:"記憶體像「書桌」，不會幫你寫作業。",k:0},{t:"顯示卡 (GPU)",r:"顯示卡是「美術大師」，不是總指揮。",k:0}],h:"知名品牌有 Intel (i5、i7) 和 AMD。"},
+{q:"電腦開機等了 3 分鐘，為了解救開機速度，系統最該裝在哪裡？",o:[{t:"傳統硬碟 (HDD)",r:"傳統硬碟用磁盤慢慢轉，超慢！",k:0},{t:"固態硬碟 (SSD)",r:"正解！SSD 讀取超快，開機只要 5 秒！",k:1},{t:"雲端硬碟",r:"雲端是備份用的，電腦還是得靠自己的硬碟開機。",k:0},{t:"行動電源",r:"行動電源只能給你電，不能給你速度！",k:0}],h:"裡面沒有機械構造、讀取速度快如閃電的東西。"},
+{q:"開著 30 個 Google 分頁，電腦卡死不動。通常是哪裡被塞爆了？",o:[{t:"主記憶體 (RAM)",r:"答對了！像「書桌」太小，放不下就當機。",k:1},{t:"硬碟",r:"硬碟是長久存檔用的，開分頁先耗盡的是暫存空間。",k:0},{t:"螢幕尺寸",r:"螢幕小只會讓你眼睛酸，不會讓電腦卡死。",k:0},{t:"電源供應器",r:"電源只是供電，跟分頁數量無關。",k:0}],h:"想像「書桌」面積有限，放太多東西就滿出來。"},
+{q:"如果電腦是大企業，誰是負責管理、給你視窗介面的「總經理」？",o:[{t:"防毒軟體",r:"防毒軟體像大樓警衛，不管營運。",k:0},{t:"作業系統 (OS)",r:"沒錯！Windows、macOS 都是作業系統。",k:1},{t:"瀏覽器 (Chrome)",r:"瀏覽器只是讓你上網的工具。",k:0},{t:"文書軟體 (Word)",r:"Word 只負責打報告。",k:0}],h:"開機第一眼看到在轉圈圈的就是它。"},
+{q:"1TB 大概等於多少 GB？",o:[{t:"100 GB",r:"太小看 TB 了！",k:0},{t:"1000 GB",r:"正解！1 TB = 1000 GB！",k:1},{t:"10000 GB",r:"那叫 10TB。",k:0},{t:"10 GB",r:"連一個手遊都裝不下！",k:0}],h:"T 是 G 的下一個大單位，加三個零。"},
+{q:"為了玩 3A 大作不卡成 PPT，買筆電要確認有哪個零件？",o:[{t:"高級視訊鏡頭",r:"視訊鏡頭只負責拍你的臉。",k:0},{t:"獨立顯示卡 (獨顯)",r:"對！獨顯專門處理 3D 特效！",k:1},{t:"超高音質喇叭",r:"聲音再好，畫面卡也玩不下去。",k:0},{t:"觸控螢幕",r:"打大作通常用鍵鼠，觸控幫不上忙。",k:0}],h:"像 NVIDIA RTX 3070 這種零件。"},
+{q:"LINE 訊息能準確送到對方手機，是因為每台設備都有專屬的「數位門牌」，這叫？",o:[{t:"身分證字號",r:"這是政府發的，網路不認。",k:0},{t:"IP 位址",r:"正確！IP 就是網路上的門牌。",k:1},{t:"GPS 定位",r:"GPS 是導航用的，不是傳資料的門牌。",k:0},{t:"HTTPS",r:"這是加密傳輸規則，不是門牌。",k:0}],h:"像「192.168.1.1」的數字。"},
+{q:"朋友說照片都存「雲端」，雲端到底在哪？",o:[{t:"天上的雲層裡",r:"數位資料無法存在水氣裡。",k:0},{t:"遠端科技公司的超大冷氣機房裡",r:"沒錯！雲端就是「別人的超強電腦」。",k:1},{t:"手機螢幕玻璃夾層中",r:"這是科幻片情節！",k:0},{t:"Wi-Fi 訊號中",r:"Wi-Fi 只是傳輸通道，不能存東西。",k:0}],h:"非常巨大、有冷氣的實體大樓機房。"},
+{q:"收到「Netflix 帳戶異常，請輸入信用卡號」的信，這是哪種網路陷阱？",o:[{t:"DDoS 攻擊",r:"DDoS 是癱瘓網站的攻擊，不騙信用卡。",k:0},{t:"釣魚攻擊 (Phishing)",r:"超危險！駭客偽裝成官方騙你上鉤！",k:1},{t:"勒索軟體",r:"勒索軟體是鎖你檔案逼你付錢。",k:0},{t:"實體駭客入侵",r:"駭客用 Email 就能騙到你。",k:0}],h:"駭客撒下誘餌等你「上鉤」。"},
+{q:"哪種密碼設定最像「鋼鐵保險箱」？",o:[{t:"用生日 (如 920520)",r:"駭客看你 IG 就知道生日了！",k:0},{t:"所有網站同一組密碼",r:"一個被破解，全部像骨牌倒！",k:0},{t:"大小寫英數符號，每個網站都不同",r:"正解！大幅增加破解難度！",k:1},{t:"密碼寫便利貼貼螢幕旁",r:"「物理外洩」，同學都看到了！",k:0}],h:"密碼越複雜越好，不同網站用不同密碼。"},
+{q:"期末報告想引用網路文章，怎樣做才不會被老師死當？",o:[{t:"整段複製貼上裝自己寫的",r:"嚴重抄襲！軟體一查就抓到。",k:0},{t:"改幾個字就不算抄襲",r:"「改寫抄襲」，沒標來源一樣違規！",k:0},{t:"用自己的話總結，放上參考資料網址",r:"完美！尊重原作者並交代來源！",k:1},{t:"截圖放進報告",r:"用圖片也是引用，不標來源一樣母湯！",k:0}],h:"「若有引述非自身產出之文字」要標來源。"},
+{q:"ChatGPT 這種 AI 助理是靠哪種技術練成的？",o:[{t:"區塊鏈",r:"區塊鏈是記帳和虛擬貨幣用的。",k:0},{t:"擴增實境 (AR)",r:"AR 是像寶可夢 GO 的技術。",k:0},{t:"生成式人工智慧 (Generative AI)",r:"答對了！學會「生成」像人類講話的內容。",k:1},{t:"量子運算",r:"ChatGPT 還不需要量子電腦。",k:0}],h:"讓電腦能「產出、創造」新內容的技術。"},
+{q:"手機開冷氣、手錶監控心跳，這種「萬物連上網」叫什麼？",o:[{t:"虛擬實境 (VR)",r:"VR 是戴頭盔進虛擬世界。",k:0},{t:"物聯網 (IoT)",r:"沒錯！讓物品都連上網路變聰明！",k:1},{t:"元宇宙",r:"元宇宙是虛擬社交空間。",k:0},{t:"比特幣",r:"虛擬錢幣，不能量心跳！",k:0}],h:"「物」品都「聯」上「網」路。"},
+{q:"自動駕駛車需要哪種「超低延遲」通訊技術才能瞬間煞車？",o:[{t:"3G 網路",r:"用 3G 可能已經撞上去了...",k:0},{t:"藍牙",r:"藍牙距離太短，只能連耳機。",k:0},{t:"5G 通訊技術",r:"正確！5G 超低延遲，是自駕車保命符！",k:1},{t:"紅外線",r:"紅外線不能有東西擋住。",k:0}],h:"最新一代行動網路，比 4G 快幾十倍。"},
+{q:"哪種未來科技像「影分身之術」，同時走完迷宮所有路線？",o:[{t:"傳統超級電腦",r:"傳統電腦一次只走一條路。",k:0},{t:"邊緣運算",r:"只是把運算移到近的地方。",k:0},{t:"量子電腦",r:"沒錯！量子疊加態讓運算力大爆發！",k:1},{t:"光纖網路",r:"光纖是傳輸線路，不具運算能力。",k:0}],h:"聽起來很有「漫威電影」物理學的感覺。"},
+{q:"電腦卡死，你最該先嘗試的「IT 神聖儀式」是？",o:[{t:"拆硬碟吹一吹",r:"千萬不要！電腦會報銷！",k:0},{t:"重新開機 (Restart)",r:"正解！能解決 90% 的小毛病！",k:1},{t:"用力拍打主機三下",r:"只對古老真空管電視有效！",k:0},{t:"拔掉網路線",r:"除非被駭客攻擊，否則沒用。",k:0}],h:"「遇到問題，先＿＿試試看。」"},
+{q:"LINE 群組看到「每天吃這水果，癌症都能治好！」你該先做什麼？",o:[{t:"轉傳給十個朋友",r:"這就是假新聞氾濫的元兇！",k:0},{t:"看有沒有長輩說感恩分享",r:"長輩回覆不能當科學證據！",k:0},{t:"去事實查核中心查看看",r:"非常優秀！批判性思考是數位公民必備素養！",k:1},{t:"改更聳動標題發 IG",r:"你也會變散佈謠言的共犯！",k:0}],h:"需要「客觀的驗證單位」。"},
+{q:"筆電規格「On board 記憶體 8GB」代表什麼？",o:[{t:"附贈衝浪板",r:"英文不是這樣翻的！",k:0},{t:"記憶體銲死主機板上，無法擴充！",r:"答對了！買之前確認容量夠不夠！",k:1},{t:"可以帶上飛機",r:"所有筆電都能帶上飛機。",k:0},{t:"開機速度快一倍",r:"銲接不代表速度變快。",k:0}],h:"書桌被強力膠黏死，換不了大桌子。"},
+{q:"新手機通常只有一種「正反都能插」的接孔，叫什麼？",o:[{t:"USB Type-A",r:"傳統長方形 USB，要插三次才對！",k:0},{t:"VGA 介面",r:"古老的藍色大頭影像線。",k:0},{t:"USB Type-C",r:"正確！連 iPhone 都改用它了！",k:1},{t:"耳機孔 (3.5mm)",r:"耳機孔是圓形的，很多手機取消了。",k:0}],h:"蘋果手機被歐盟規定必須改成這種接孔。"},
+{q:"在星巴克連免費 Wi-Fi，做哪件事最危險？",o:[{t:"看 YouTube",r:"看影片不涉及輸入密碼，風險較低。",k:0},{t:"查天氣",r:"公開資訊，不會造成財產損失。",k:0},{t:"登入網路銀行轉帳",r:"千萬母湯！公共 Wi-Fi 容易被駭客側錄！",k:1},{t:"看學校行事曆",r:"不需帳密，單純瀏覽是安全的。",k:0}],h:"哪件事被偷看到會讓你當場破產。"}
 ];
 
 function shuf(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
-function grd(s,t){const p=s/t;if(p>=.9)return{e:"🏆",t:"電腦天才！",s:"你根本是 IT 部門本人吧？",c:"#FFD700"};if(p>=.7)return{e:"🌟",t:"數位達人！",s:"你的資訊素養超越 87% 的人！",c:"#7CF5FF"};if(p>=.5)return{e:"📱",t:"科技小白進化中",s:"再加把勁就能成為科技達人！",c:"#A78BFA"};return{e:"🐣",t:"數位新生兒",s:"沒關係！看完解答你已經升級了！",c:"#FB923C"}}
-async function postScore(d){try{await fetch(SCORE_API,{method:"POST",mode:"no-cors",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)});return"ok"}catch(e){return"er"}}
+function grd(s,t){const p=s/t;if(p>=.9)return{e:"🏆",t:"電腦天才！",s:"你根本是 IT 部門本人吧？",c:"#FFD700"};if(p>=.7)return{e:"🌟",t:"數位達人！",s:"資訊素養超越 87% 的人！",c:"#7CF5FF"};if(p>=.5)return{e:"📱",t:"科技小白進化中",s:"再加把勁就能成為科技達人！",c:"#A78BFA"};return{e:"🐣",t:"數位新生兒",s:"沒關係！看完解答你已經升級了！",c:"#FB923C"}}
 
 function Login({onOk}){
-  const[sid,setS]=useState("");const[pw,setP]=useState("");const[err,setE]=useState("");
-  const go=()=>{
-    const s=sid.trim(),p=pw.trim();
-    if(!s||!p){setE("請輸入學號和密碼");return}
-    const stu=STUDENTS[s];
-    if(!stu){setE("查無此學號");return}
-    if(p!==getPw(s)){setE("密碼錯誤");return}
-    const chg=!hasChangedPw(s);
-    onOk({sid:s,name:stu.n,cls:stu.c,chg});
-  };
-  return(<div className="card" style={{maxWidth:420,marginTop:50,textAlign:"center"}}><div style={{fontSize:56,marginBottom:12}}>🔐</div><h1 style={{fontSize:28,fontWeight:900,marginBottom:8}}>資訊素養大挑戰</h1><p style={{fontSize:14,color:"#94a3b8",marginBottom:24}}>請用學號登入開始測驗</p><div style={{textAlign:"left",marginBottom:16}}><label className="fl">學號</label><input className={"fi"+(err&&!sid.trim()?" err":"")} placeholder="請輸入學號" value={sid} onChange={e=>setS(e.target.value)} onKeyDown={e=>e.key==="Enter"&&document.getElementById("pw")?.focus()}/></div><div style={{textAlign:"left",marginBottom:20}}><label className="fl">密碼</label><input id="pw" type="password" className={"fi"+(err&&!pw.trim()?" err":"")} placeholder="首次登入密碼為學號" value={pw} onChange={e=>setP(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()}/></div>{err&&<p className="em">⚠️ {err}</p>}<button className="bp" onClick={go}>登入 →</button><p style={{fontSize:11,color:"#475569",marginTop:16}}>首次登入密碼為學號，登入後需修改密碼</p><p style={{fontSize:10,color:"#334155",marginTop:8}}>v4.0 | 2026-02-24</p></div>);
+  const[sid,setS]=useState("");const[pw,setP]=useState("");const[err,setE]=useState("");const[ld,setL]=useState(false);
+  const go=async()=>{if(!sid.trim()||!pw.trim()){setE("請輸入學號和密碼");return}setL(true);setE("");try{const r=await callServer("login",{sid:sid.trim(),pw:pw.trim()});if(r.status==="ok")onOk({sid:sid.trim(),name:r.name,cls:r.className,chg:r.needChangePw,opw:pw.trim()});else setE(r.message||"登入失敗")}catch(e){setE("連線中，請稍後再試（約5秒）")}setL(false)};
+  return(<div className="card" style={{maxWidth:420,marginTop:50,textAlign:"center"}}><div style={{fontSize:56,marginBottom:12}}>🔐</div><h1 style={{fontSize:28,fontWeight:900,marginBottom:8}}>資訊素養大挑戰</h1><p style={{fontSize:14,color:"#94a3b8",marginBottom:24}}>請用學號登入開始測驗</p><div style={{textAlign:"left",marginBottom:16}}><label className="fl">學號</label><input className={"fi"+(err&&!sid.trim()?" err":"")} placeholder="請輸入學號" value={sid} onChange={e=>setS(e.target.value)} onKeyDown={e=>e.key==="Enter"&&document.getElementById("pw")?.focus()}/></div><div style={{textAlign:"left",marginBottom:20}}><label className="fl">密碼</label><input id="pw" type="password" className={"fi"+(err&&!pw.trim()?" err":"")} placeholder="首次登入密碼為學號" value={pw} onChange={e=>setP(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()}/></div>{err&&<p className="em">⚠️ {err}</p>}<button className="bp" onClick={go} disabled={ld}>{ld?<><span className="ld"/>登入中...</>:"登入 →"}</button><p style={{fontSize:11,color:"#475569",marginTop:16}}>首次登入密碼為學號，登入後需修改密碼</p><p style={{fontSize:10,color:"#334155",marginTop:8}}>v6.0 | 2026-02-24</p></div>);
 }
-
 function ChgPw({stu,onOk}){
-  const[np,setN]=useState("");const[np2,setN2]=useState("");const[err,setE]=useState("");
-  const go=()=>{if(np.length<4){setE("新密碼至少 4 個字元");return}if(np===stu.sid){setE("新密碼不能和學號一樣");return}if(np!==np2){setE("兩次密碼不一致");return}setPw(stu.sid,np);onOk()};
-  return(<div className="card" style={{maxWidth:420,marginTop:50,textAlign:"center"}}><div style={{fontSize:48,marginBottom:8}}>🔑</div><h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>首次登入，請修改密碼</h2><p style={{fontSize:14,color:"#94a3b8",marginBottom:20}}>Hi {stu.name}，為了帳號安全請設定新密碼</p><div style={{textAlign:"left",marginBottom:16}}><label className="fl">新密碼（至少 4 字元）</label><input type="password" className="fi" placeholder="輸入新密碼" value={np} onChange={e=>setN(e.target.value)}/></div><div style={{textAlign:"left",marginBottom:20}}><label className="fl">確認新密碼</label><input type="password" className="fi" placeholder="再輸入一次" value={np2} onChange={e=>setN2(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()}/></div>{err&&<p className="em">⚠️ {err}</p>}<button className="bp" onClick={go}>確認修改 ✓</button></div>);
+  const[np,setN]=useState("");const[np2,setN2]=useState("");const[err,setE]=useState("");const[ld,setL]=useState(false);
+  const go=async()=>{if(np.length<4){setE("新密碼至少 4 個字元");return}if(np===stu.sid){setE("新密碼不能和學號一樣");return}if(np!==np2){setE("兩次密碼不一致");return}setL(true);setE("");try{const r=await callServer("changepw",{sid:stu.sid,oldpw:stu.opw,newpw:np});if(r.status==="ok")onOk();else setE(r.message||"失敗")}catch(e){setE("系統忙碌，請稍後再試")}setL(false)};
+  return(<div className="card" style={{maxWidth:420,marginTop:50,textAlign:"center"}}><div style={{fontSize:48,marginBottom:8}}>🔑</div><h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>首次登入，請修改密碼</h2><p style={{fontSize:14,color:"#94a3b8",marginBottom:20}}>Hi {stu.name}，請設定新密碼</p><div style={{textAlign:"left",marginBottom:16}}><label className="fl">新密碼（至少 4 字元）</label><input type="password" className="fi" placeholder="輸入新密碼" value={np} onChange={e=>setN(e.target.value)}/></div><div style={{textAlign:"left",marginBottom:20}}><label className="fl">確認新密碼</label><input type="password" className="fi" placeholder="再輸入一次" value={np2} onChange={e=>setN2(e.target.value)} onKeyDown={e=>e.key==="Enter"&&go()}/></div>{err&&<p className="em">⚠️ {err}</p>}<button className="bp" onClick={go} disabled={ld}>{ld?<><span className="ld"/>儲存中...</>:"確認修改 ✓"}</button></div>);
 }
-
 function Quiz({stu,onEnd}){
   const[c,setC]=useState(0);const[sel,setSel]=useState(null);const[done,setDone]=useState(false);const[sc,setSc]=useState(0);const[ht,setHt]=useState(false);const[rec,setRec]=useState([]);const[opts,setOpts]=useState([]);
   useEffect(()=>{setOpts(shuf(Q[c].o))},[c]);
@@ -169,10 +143,9 @@ function Quiz({stu,onEnd}){
     {done&&<button className="bp" onClick={nxt}>{c<Q.length-1?"下一題 →":"查看成績 🎯"}</button>}
   </div>);
 }
-
 function Result({stu,sc,rec,onOut}){
   const g=grd(sc,Q.length);const[sh,setSh]=useState(false);const[ss,setSs]=useState("ld");
-  useEffect(()=>{postScore({action:"submit_score",sid:stu.sid,name:stu.name,className:stu.cls,score:sc,total:Q.length,record:rec.map(r=>({correct:r.ok}))}).then(r=>setSs(r))},[]);
+  useEffect(()=>{callServer("submit",{data:{sid:stu.sid,name:stu.name,className:stu.cls,score:sc,total:Q.length,record:rec.map(r=>({correct:r.ok}))}}).then(()=>setSs("ok")).catch(()=>setSs("er"))},[]);
   return(<div className="card" style={{maxWidth:580,textAlign:"center",marginTop:20}}>
     <div className="sbar" style={{justifyContent:"center",marginBottom:20}}><span>👤 {stu.name}</span><span className="sep">|</span><span className="dim">{stu.sid}</span><span className="sep">|</span><span className="cls">{stu.cls}</span></div>
     <div style={{fontSize:56,marginBottom:4}}>{g.e}</div><h1 style={{fontSize:28,fontWeight:900,color:g.c,marginBottom:6}}>{g.t}</h1><p style={{fontSize:15,color:"#94a3b8",marginBottom:24}}>{g.s}</p>
@@ -186,9 +159,9 @@ function Result({stu,sc,rec,onOut}){
     <button className="bp" style={{marginTop:12}} onClick={onOut}>登出 🔄</button>
   </div>);
 }
-
 function App(){
   const[ph,setPh]=useState("login");const[stu,setStu]=useState(null);const[fs,setFs]=useState(0);const[rec,setRec]=useState([]);
+  useEffect(()=>{initBridge()},[]);
   if(ph==="login")return<Login onOk={s=>{setStu(s);setPh(s.chg?"chgpw":"quiz")}}/>;
   if(ph==="chgpw")return<ChgPw stu={stu} onOk={()=>setPh("quiz")}/>;
   if(ph==="quiz")return<Quiz stu={stu} onEnd={(s,r)=>{setFs(s);setRec(r);setPh("result")}}/>;
